@@ -1,0 +1,6 @@
+{
+  "name": "GMB Reviewer",
+  "description": "Ultra-clean Google My Business reviewer and multi-tenant landing page generator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
