@@ -6,6 +6,7 @@ import {
   deleteWorkspace,
   isSessionAuthenticated
 } from './utils/api';
+import { resolveIncomingUrlPayload, findLandingPageBySlug } from './utils/storage';
 import { PublicGate } from './components/PublicGate';
 import { PasscodeLock } from './components/PasscodeLock';
 import { AdminDashboard } from './components/AdminDashboard';
@@ -30,8 +31,13 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
+    const resolved = resolveIncomingUrlPayload();
     const list = await fetchWorkspaces();
-    setPages(list);
+    if (resolved && !list.some(p => p.slug.toLowerCase() === resolved.slug.toLowerCase())) {
+      setPages([resolved, ...list]);
+    } else {
+      setPages(list);
+    }
     setLoading(false);
   };
 
@@ -110,9 +116,9 @@ export default function App() {
   }
 
   // 3. Customer Landing Page (Business Slug)
-  const matchedPage = pages.find(
-    p => p.slug.toLowerCase() === trimmedPath.toLowerCase()
-  );
+  const matchedPage =
+    pages.find(p => p.slug.toLowerCase() === trimmedPath.toLowerCase()) ||
+    findLandingPageBySlug(trimmedPath);
 
   if (matchedPage) {
     return <CustomerLandingPage page={matchedPage} />;

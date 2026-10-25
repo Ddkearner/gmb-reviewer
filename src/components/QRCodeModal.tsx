@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
 import { LandingPage } from '../types';
 import { X, Download } from 'lucide-react';
+import { buildShareableLandingPageUrl } from '../utils/storage';
 
 interface QRCodeModalProps {
   page: LandingPage;
@@ -10,7 +11,7 @@ interface QRCodeModalProps {
 
 export const QRCodeModal: React.FC<QRCodeModalProps> = ({ page, onClose }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const fullUrl = `${window.location.origin}/${page.slug}`;
+  const fullUrl = buildShareableLandingPageUrl(page);
 
   useEffect(() => {
     if (canvasRef.current) {

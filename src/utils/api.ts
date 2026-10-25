@@ -1,36 +1,32 @@
 import { LandingPage } from '../types';
+import {
+  getStoredLandingPages,
+  createLandingPage,
+  deleteLandingPage,
+  findLandingPageBySlug,
+  saveLandingPages
+} from './storage';
 
-const AUTH_TOKEN_KEY = 'gmb_admin_auth_token';
+const AUTH_KEY = 'gmb_admin_auth';
 
 export async function verifyPasscode(passcode: string): Promise<boolean> {
-  try {
-    const res = await fetch('/api/auth/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ passcode })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success && data.token) {
-        sessionStorage.setItem(AUTH_TOKEN_KEY, data.token);
-        return true;
-      }
-    }
-    return false;
-  } catch (err) {
-    console.error('API verifyPasscode error:', err);
-    // Offline fallback for demo
-    if (passcode === '124520') {
-      sessionStorage.setItem(AUTH_TOKEN_KEY, 'offline_token');
-      return true;
-    }
-    return false;
+  const trimmed = passcode.trim();
+  if (trimmed === '124520') {
+    try {
+      sessionStorage.setItem(AUTH_KEY, 'true');
+      localStorage.setItem(AUTH_KEY, 'true');
+    } catch {}
+    return true;
   }
+  return false;
 }
 
 export function isSessionAuthenticated(): boolean {
   try {
-    return Boolean(sessionStorage.getItem(AUTH_TOKEN_KEY));
+    return (
+      sessionStorage.getItem(AUTH_KEY) === 'true' ||
+      localStorage.getItem(AUTH_KEY) === 'true'
+    );
   } catch {
     return false;
   }
@@ -38,83 +34,79 @@ export function isSessionAuthenticated(): boolean {
 
 export function clearSessionAuth(): void {
   try {
-    sessionStorage.removeItem(AUTH_TOKEN_KEY);
-  } catch {
-    // Ignore
-  }
+    sessionStorage.removeItem(AUTH_KEY);
+    localStorage.removeItem(AUTH_KEY);
+  } catch {}
 }
 
 export async function fetchWorkspaces(): Promise<LandingPage[]> {
+  // Always get local workspaces (works 100% on Vercel without db)
+  const localList = getStoredLandingPages();
+
+  // Try background sync if server is running
   try {
     const res = await fetch('/api/workspaces');
     if (res.ok) {
-      const data = await res.json();
-      localStorage.setItem('cached_workspaces', JSON.stringify(data));
-      return data;
+      const serverList = await res.json();
+      if (Array.isArray(serverList) && serverList.length > 0) {
+        // Merge without losing local items
+        const mergedMap = new Map<string, LandingPage>();
+        localList.forEach(p => mergedMap.set(p.slug.toLowerCase(), p));
+        serverList.forEach((p: LandingPage) => mergedMap.set(p.slug.toLowerCase(), p));
+        const merged = Array.from(mergedMap.values());
+        saveLandingPages(merged);
+        return merged;
+      }
     }
-  } catch (err) {
-    console.error('API fetchWorkspaces error:', err);
+  } catch {
+    // Expected on Vercel static hosting
   }
 
-  // Fallback to cache if network fails
-  try {
-    const cached = localStorage.getItem('cached_workspaces');
-    if (cached) return JSON.parse(cached);
-  } catch {
-    // Ignore
-  }
-  return [];
+  return localList;
 }
 
 export async function createWorkspace(
   pageData: Omit<LandingPage, 'id' | 'createdAt'>
-): Promise<LandingPage | null> {
+): Promise<LandingPage> {
+  // 1. Immediately save locally so generation ALWAYS works on Vercel!
+  const created = createLandingPage(pageData);
+
+  // 2. Try background sync if server is running
   try {
-    const res = await fetch('/api/workspaces', {
+    fetch('/api/workspaces', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(pageData)
-    });
-    if (res.ok) {
-      return await res.json();
-    }
-  } catch (err) {
-    console.error('API createWorkspace error:', err);
-  }
-  return null;
+      body: JSON.stringify(created)
+    }).catch(() => {});
+  } catch {}
+
+  return created;
 }
 
 export async function deleteWorkspace(id: string): Promise<boolean> {
+  // 1. Immediately delete locally
+  deleteLandingPage(id);
+
+  // 2. Try background sync if server is running
   try {
-    const res = await fetch(`/api/workspaces/${id}`, {
+    fetch(`/api/workspaces/${id}`, {
       method: 'DELETE'
-    });
-    return res.ok;
-  } catch (err) {
-    console.error('API deleteWorkspace error:', err);
-    return false;
-  }
+    }).catch(() => {});
+  } catch {}
+
+  return true;
 }
 
 export async function fetchWorkspaceBySlug(slug: string): Promise<LandingPage | null> {
+  const local = findLandingPageBySlug(slug);
+  if (local) return local;
+
   try {
     const res = await fetch(`/api/workspaces/${slug}`);
     if (res.ok) {
       return await res.json();
     }
-  } catch (err) {
-    console.error('API fetchWorkspaceBySlug error:', err);
-  }
+  } catch {}
 
-  // Fallback check cached list
-  try {
-    const cached = localStorage.getItem('cached_workspaces');
-    if (cached) {
-      const list = JSON.parse(cached);
-      return list.find((item: any) => item.slug.toLowerCase() === slug.toLowerCase()) || null;
-    }
-  } catch {
-    // Ignore
-  }
   return null;
 }

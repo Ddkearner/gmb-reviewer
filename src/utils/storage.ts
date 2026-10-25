@@ -1,8 +1,19 @@
 import { LandingPage } from '../types';
-import { INITIAL_LANDING_PAGES } from '../data/categories';
+import { INITIAL_LANDING_PAGES, CATEGORIES } from '../data/categories';
 
 const STORAGE_KEY = 'gmb_reviewer_pages_v1';
 const ADMIN_AUTH_KEY = 'gmb_reviewer_admin_auth';
+
+export function getPositiveReviewForCategory(categoryName: string): string {
+  const cat = CATEGORIES.find(
+    c => c.name.toLowerCase() === categoryName.toLowerCase() ||
+         categoryName.toLowerCase().includes(c.id)
+  );
+  if (cat && cat.defaultReviews.length > 0) {
+    return cat.defaultReviews[0];
+  }
+  return 'Outstanding service and very polite staff! Highly recommend this place.';
+}
 
 export function getStoredLandingPages(): LandingPage[] {
   try {
@@ -38,24 +49,28 @@ export function findLandingPageBySlug(slug: string): LandingPage | undefined {
 
 export function createLandingPage(pageData: Omit<LandingPage, 'id' | 'createdAt'>): LandingPage {
   const pages = getStoredLandingPages();
+  const cleanSlug = slugify(pageData.slug || pageData.businessName);
+
+  // Check if page with slug already exists
+  const existingIndex = pages.findIndex(p => p.slug.toLowerCase() === cleanSlug.toLowerCase());
+
   const newPage: LandingPage = {
     ...pageData,
-    id: 'lp-' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
+    slug: cleanSlug,
+    id: existingIndex >= 0 ? pages[existingIndex].id : 'lp-' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
     createdAt: new Date().toISOString()
   };
-  const updated = [newPage, ...pages];
+
+  let updated: LandingPage[];
+  if (existingIndex >= 0) {
+    updated = [...pages];
+    updated[existingIndex] = newPage;
+  } else {
+    updated = [newPage, ...pages];
+  }
+
   saveLandingPages(updated);
   return newPage;
-}
-
-export function updateLandingPage(id: string, updates: Partial<LandingPage>): LandingPage | null {
-  const pages = getStoredLandingPages();
-  const index = pages.findIndex(p => p.id === id);
-  if (index === -1) return null;
-  const updatedPage = { ...pages[index], ...updates };
-  pages[index] = updatedPage;
-  saveLandingPages(pages);
-  return updatedPage;
 }
 
 export function deleteLandingPage(id: string): void {
@@ -76,22 +91,54 @@ export function slugify(text: string): string {
     .replace(/-+$/, '');
 }
 
-export function isAdminAuthenticated(): boolean {
-  try {
-    return sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true';
-  } catch {
-    return false;
-  }
+/**
+ * Builds a universal shareable URL that works on ANY device (even with no database).
+ * Encodes business details so customer phones scanning QR or opening links immediately load the page.
+ */
+export function buildShareableLandingPageUrl(page: LandingPage): string {
+  const origin = window.location.origin;
+  const params = new URLSearchParams();
+  params.set('b', page.businessName);
+  params.set('c', page.category);
+  params.set('u', page.gmbReviewUrl);
+
+  return `${origin}/${page.slug}?${params.toString()}`;
 }
 
-export function setAdminAuthenticated(auth: boolean): void {
+/**
+ * Extracts payload from incoming URL parameters and saves to local state.
+ * Cleans the URL path with window.history.replaceState so customer sees clean clean domain.com/slug.
+ */
+export function resolveIncomingUrlPayload(): LandingPage | null {
   try {
-    if (auth) {
-      sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
-    } else {
-      sessionStorage.removeItem(ADMIN_AUTH_KEY);
+    const searchParams = new URLSearchParams(window.location.search);
+    const b = searchParams.get('b');
+    const u = searchParams.get('u');
+    const c = searchParams.get('c') || 'Local Business';
+    const currentSlug = window.location.pathname.replace(/^\/+|\/+$/g, '');
+
+    if (currentSlug && currentSlug !== 'secret-admin' && u && b) {
+      const page: LandingPage = {
+        id: 'lp-' + currentSlug,
+        slug: currentSlug,
+        businessName: b,
+        category: c,
+        gmbReviewUrl: u,
+        ratingScore: 5.0,
+        totalReviewsCount: 150,
+        reviews: [getPositiveReviewForCategory(c)],
+        createdAt: new Date().toISOString()
+      };
+
+      // Save to local cache so page survives reload
+      createLandingPage(page);
+
+      // Clean the URL bar so customer sees clean /slug
+      window.history.replaceState({}, '', `/${currentSlug}`);
+      return page;
     }
-  } catch {
-    // ignore storage restrictions
+  } catch (err) {
+    console.error('Error resolving incoming url payload:', err);
   }
+  return null;
 }

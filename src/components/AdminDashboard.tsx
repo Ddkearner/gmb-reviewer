@@ -12,6 +12,8 @@ interface AdminDashboardProps {
   onNavigateToPage: (slug: string) => void;
 }
 
+import { buildShareableLandingPageUrl } from '../utils/storage';
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   pages,
   onLock,
@@ -24,12 +26,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const handleCopy = (slug: string) => {
-    const fullUrl = `${window.location.origin}/${slug}`;
+  const handleCopy = (page: LandingPage) => {
+    const fullUrl = buildShareableLandingPageUrl(page);
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(fullUrl);
     }
-    setCopiedSlug(slug);
+    setCopiedSlug(page.slug);
     setTimeout(() => setCopiedSlug(null), 1500);
   };
 
@@ -98,7 +100,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
                   <button
                     type="button"
-                    onClick={() => handleCopy(page.slug)}
+                    onClick={() => handleCopy(page)}
                     className={`h-9 px-3 rounded-full text-xs font-semibold active:scale-95 transition-all ${
                       isCopied
                         ? 'bg-[#25D366] text-[#FFFFFF]'
