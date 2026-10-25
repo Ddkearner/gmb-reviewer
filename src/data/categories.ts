@@ -2,14 +2,14 @@ import { CategoryTemplate, LandingPage } from '../types';
 
 export const CATEGORIES: CategoryTemplate[] = [
   {
-    id: 'gym',
-    name: 'Gym & Fitness',
-    icon: 'Dumbbell',
+    id: 'dental',
+    name: 'Dental Clinic',
+    icon: 'Smile',
     defaultReviews: [
-      'Top tier gym equipment and cleanest workout environment in the area. Trainers are truly supportive and always motivate you to hit your goals!',
-      'Best gym experience ever! High quality machines, spacious workout floors, and polite staff. Highly recommend joining.',
-      'Outstanding gym! Great atmosphere, hygienic locker rooms, and certified trainers who guide you properly through every workout.',
-      'Superb fitness center! Friendly community, advanced cardio and strength equipment, and great personal training sessions.'
+      'Virtually painless treatment! The dentist was exceptionally gentle, modern sterile equipment, and great consultation.',
+      'Best dental clinic in town. Very hygienic setup, friendly doctor who makes you feel relaxed, and transparent pricing.',
+      'Wonderful dental care experience! Friendly staff, no unnecessary treatments pushed, and excellent results.',
+      'Clean, prompt, and very professional. My teeth cleaning and filling were done smoothly with zero discomfort.'
     ]
   },
   {
@@ -24,25 +24,14 @@ export const CATEGORIES: CategoryTemplate[] = [
     ]
   },
   {
-    id: 'coaching',
-    name: 'Coaching & Education',
-    icon: 'GraduationCap',
+    id: 'gym',
+    name: 'Gym & Fitness',
+    icon: 'Dumbbell',
     defaultReviews: [
-      'Exceptional faculty and structured study material. Concept clarity and regular doubt sessions made a massive difference in my scores!',
-      'Best coaching institute with dedicated teachers who give individual attention to every student. Great test series and mentorship.',
-      'Highly recommended institute! Supportive faculty, interactive classroom lectures, and disciplined academic environment.',
-      'Top-notch teaching methodology! The teachers are patient, concepts are crystal clear, and results speak for themselves.'
-    ]
-  },
-  {
-    id: 'dental',
-    name: 'Dental Clinic',
-    icon: 'Smile',
-    defaultReviews: [
-      'Virtually painless treatment! The dentist was exceptionally gentle, modern sterile equipment, and great consultation.',
-      'Best dental clinic in town. Very hygienic setup, friendly doctor who makes you feel relaxed, and transparent pricing.',
-      'Wonderful dental care experience! Friendly staff, no unnecessary treatments pushed, and excellent results.',
-      'Clean, prompt, and very professional. My teeth cleaning and filling were done smoothly with zero discomfort.'
+      'Top tier gym equipment and cleanest workout environment in the area. Trainers are truly supportive and always motivate you to hit your goals!',
+      'Best gym experience ever! High quality machines, spacious workout floors, and polite staff. Highly recommend joining.',
+      'Outstanding gym! Great atmosphere, hygienic locker rooms, and certified trainers who guide you properly through every workout.',
+      'Superb fitness center! Friendly community, advanced cardio and strength equipment, and great personal training sessions.'
     ]
   },
   {
@@ -57,6 +46,17 @@ export const CATEGORIES: CategoryTemplate[] = [
     ]
   },
   {
+    id: 'coaching',
+    name: 'Coaching & Education',
+    icon: 'GraduationCap',
+    defaultReviews: [
+      'Exceptional faculty and structured study material. Concept clarity and regular doubt sessions made a massive difference in my scores!',
+      'Best coaching institute with dedicated teachers who give individual attention to every student. Great test series and mentorship.',
+      'Highly recommended institute! Supportive faculty, interactive classroom lectures, and disciplined academic environment.',
+      'Top-notch teaching methodology! The teachers are patient, concepts are crystal clear, and results speak for themselves.'
+    ]
+  },
+  {
     id: 'cafe',
     name: 'Cafe & Restaurant',
     icon: 'Utensils',
@@ -65,43 +65,6 @@ export const CATEGORIES: CategoryTemplate[] = [
       'Amazing coffee and delectable food! Wonderful cozy vibe, polite servers, and great music. Loved every bit of it.',
       'One of the best dining spots in town! Great presentation, generous portions, and warm hospitable staff.',
       'Fantastic experience! Mouth-watering delicacies, clean seating area, and fast turnaround time.'
-    ]
-  },
-  {
-    id: 'automotive',
-    name: 'Auto Garage & Detailing',
-    icon: 'Car',
-    defaultReviews: [
-      'Honest, fast, and high quality service! My car feels brand new. Fair prices and zero hidden costs.',
-      'Exceptional detailing and mechanical work. Timely delivery, professional mechanics, and clean waiting lounge.',
-      'Best workshop in the city! Diagnosed the problem immediately and fixed it at an honest price. Very satisfied.'
-    ]
-  },
-  {
-    id: 'retail',
-    name: 'Retail Store & Shop',
-    icon: 'ShoppingBag',
-    defaultReviews: [
-      'Great collection with high quality products! Staff was helpful and guided me to the exact items I needed. Fair pricing.',
-      'Superb shopping experience! Clean organized store, courteous staff, and wide variety of options available.'
-    ]
-  },
-  {
-    id: 'realestate',
-    name: 'Real Estate & Property',
-    icon: 'Building2',
-    defaultReviews: [
-      'Honest, transparent, and prompt property advisory! Helped me find the perfect property within my budget seamlessly.',
-      'Professional real estate consultants with deep local market knowledge and hassle-free documentation support.'
-    ]
-  },
-  {
-    id: 'other',
-    name: 'Local Business / Service',
-    icon: 'Store',
-    defaultReviews: [
-      'Extremely professional, punctual, and reliable service! High quality work and courteous customer support. Highly recommended!',
-      'Exceptional experience from start to finish! Attentive team, great attention to detail, and trustworthy service.'
     ]
   }
 ];
