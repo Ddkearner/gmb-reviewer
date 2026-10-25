@@ -16,7 +16,17 @@ export default function App() {
     return window.location.pathname || '/';
   });
   const [pages, setPages] = useState<LandingPage[]>([]);
-  const [isAdminAuth, setIsAdminAuth] = useState<boolean>(() => isSessionAuthenticated());
+  const [isAdminAuth, setIsAdminAuth] = useState<boolean>(() => {
+    try {
+      return (
+        sessionStorage.getItem('gmb_admin_auth') === 'true' ||
+        localStorage.getItem('gmb_admin_auth') === 'true' ||
+        isSessionAuthenticated()
+      );
+    } catch {
+      return false;
+    }
+  });
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
@@ -45,7 +55,20 @@ export default function App() {
   };
 
   const handleAdminSuccess = () => {
+    try {
+      sessionStorage.setItem('gmb_admin_auth', 'true');
+      localStorage.setItem('gmb_admin_auth', 'true');
+    } catch {}
     setIsAdminAuth(true);
+  };
+
+  const handleAdminLock = () => {
+    try {
+      sessionStorage.removeItem('gmb_admin_auth');
+      localStorage.removeItem('gmb_admin_auth');
+      sessionStorage.removeItem('gmb_admin_auth_token');
+    } catch {}
+    setIsAdminAuth(false);
   };
 
   const handleCreatePage = async (pageData: Omit<LandingPage, 'id' | 'createdAt'>) => {
@@ -73,6 +96,7 @@ export default function App() {
     return (
       <AdminDashboard
         pages={pages}
+        onLock={handleAdminLock}
         onCreatePage={handleCreatePage}
         onDeletePage={handleDeletePage}
         onNavigateToPage={(slug) => navigateTo(`/${slug}`)}

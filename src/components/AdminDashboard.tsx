@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { LandingPage } from '../types';
-import { Plus, QrCode, Trash2, ExternalLink } from 'lucide-react';
+import { Plus, QrCode, Trash2, ExternalLink, Lock } from 'lucide-react';
 import { QRCodeModal } from './QRCodeModal';
 import { CreatePageModal } from './CreatePageModal';
 
 interface AdminDashboardProps {
   pages: LandingPage[];
+  onLock?: () => void;
   onCreatePage: (pageData: Omit<LandingPage, 'id' | 'createdAt'>) => Promise<void>;
   onDeletePage: (id: string) => Promise<void>;
   onNavigateToPage: (slug: string) => void;
@@ -13,6 +14,7 @@ interface AdminDashboardProps {
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   pages,
+  onLock,
   onCreatePage,
   onDeletePage,
   onNavigateToPage
@@ -45,13 +47,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           Landing Pages
         </h1>
 
-        <button
-          onClick={() => setIsCreateOpen(true)}
-          className="flex items-center gap-1 py-2 px-4 rounded-full bg-[#000000] text-xs font-semibold text-[#FFFFFF] active:scale-95 transition-transform"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          <span>Create New</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsCreateOpen(true)}
+            className="flex items-center gap-1 py-2 px-4 rounded-full bg-[#000000] text-xs font-semibold text-[#FFFFFF] active:scale-95 transition-transform"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Create New</span>
+          </button>
+
+          {onLock && (
+            <button
+              onClick={onLock}
+              className="w-9 h-9 rounded-full bg-[#E5E5EA] text-[#000000] flex items-center justify-center active:scale-95 transition-transform"
+              title="Lock Admin"
+              aria-label="Lock Admin"
+            >
+              <Lock className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Pages List */}

@@ -1,104 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { verifyPasscode } from '../utils/api';
+import React, { useState } from 'react';
 
 interface PasscodeLockProps {
   onSuccess: () => void;
 }
 
 export const PasscodeLock: React.FC<PasscodeLockProps> = ({ onSuccess }) => {
-  const [pin, setPin] = useState<string>('');
-  const [error, setError] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const checkPin = async (candidate: string) => {
-    setIsVerifying(true);
-    const isValid = await verifyPasscode(candidate);
-    setIsVerifying(false);
+  const handleUnlock = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setErrorMsg('');
 
-    if (isValid) {
+    const trimmed = password.trim();
+    if (trimmed === '124520') {
+      try {
+        sessionStorage.setItem('gmb_admin_auth', 'true');
+        localStorage.setItem('gmb_admin_auth', 'true');
+      } catch {}
       onSuccess();
     } else {
-      setError(true);
-      setTimeout(() => {
-        setPin('');
-        setError(false);
-      }, 400);
+      setErrorMsg('Incorrect password');
+      setPassword('');
     }
   };
-
-  const handleDigit = (digit: string) => {
-    if (isVerifying || pin.length >= 6) return;
-    const nextPin = pin + digit;
-    setPin(nextPin);
-    if (nextPin.length === 6) {
-      checkPin(nextPin);
-    }
-  };
-
-  const handleDelete = () => {
-    if (isVerifying) return;
-    setPin(prev => prev.slice(0, -1));
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key >= '0' && e.key <= '9') {
-        handleDigit(e.key);
-      } else if (e.key === 'Backspace') {
-        handleDelete();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pin, isVerifying]);
-
-  const numpad = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'];
 
   return (
     <div className="min-h-[100dvh] w-full bg-[#F2F2F7] flex flex-col items-center justify-center px-4 py-6 select-none safe-top safe-bottom">
-      <div className="w-full max-w-[280px] flex flex-col items-center">
-        {/* 6 PIN dots */}
-        <div className={`flex gap-3 mb-8 sm:mb-10 ${error ? 'animate-bounce' : ''}`}>
-          {[0, 1, 2, 3, 4, 5].map(i => (
-            <div
-              key={i}
-              className={`w-3.5 h-3.5 rounded-full transition-colors ${
-                i < pin.length ? 'bg-[#000000]' : 'bg-[#D1D1D6]'
-              }`}
-            />
-          ))}
-        </div>
+      <div className="w-full max-w-xs bg-[#FFFFFF] rounded-3xl p-6 text-center text-[#000000]">
+        <h2 className="text-xl font-bold tracking-tight mb-1">
+          Admin Access
+        </h2>
+        <p className="text-xs text-[#8E8E93] mb-5">
+          Enter password to open management panel
+        </p>
 
-        {/* Numpad */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full">
-          {numpad.map((btn, i) => {
-            if (btn === '') return <div key={i} />;
-            if (btn === 'del') {
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={handleDelete}
-                  disabled={isVerifying}
-                  className="w-14 h-14 sm:w-16 sm:h-16 mx-auto flex items-center justify-center text-xs sm:text-sm font-medium text-[#8E8E93] active:text-[#000000] active:scale-95 disabled:opacity-50"
-                >
-                  Delete
-                </button>
-              );
-            }
-            return (
-              <button
-                key={i}
-                type="button"
-                onClick={() => handleDigit(btn)}
-                disabled={isVerifying}
-                className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full bg-[#FFFFFF] text-xl sm:text-2xl font-medium text-[#000000] active:bg-[#E5E5EA] active:scale-95 transition-transform disabled:opacity-50"
-              >
-                {btn}
-              </button>
-            );
-          })}
-        </div>
+        <form onSubmit={handleUnlock} className="space-y-3">
+          <input
+            type="password"
+            inputMode="numeric"
+            value={password}
+            onChange={e => {
+              setPassword(e.target.value);
+              setErrorMsg('');
+              // If user typed 6 digits and it matches 124520, auto unlock immediately
+              if (e.target.value === '124520') {
+                try {
+                  sessionStorage.setItem('gmb_admin_auth', 'true');
+                  localStorage.setItem('gmb_admin_auth', 'true');
+                } catch {}
+                onSuccess();
+              }
+            }}
+            placeholder="Enter passcode"
+            className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-center text-lg tracking-widest text-[#000000] focus:outline-none placeholder:tracking-normal placeholder:text-xs placeholder:text-[#8E8E93]"
+            autoFocus
+          />
+
+          {errorMsg && (
+            <p className="text-xs text-red-600 font-medium">
+              {errorMsg}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="w-full min-h-[46px] rounded-full bg-[#000000] text-xs font-semibold text-[#FFFFFF] active:scale-95 transition-transform"
+          >
+            Unlock
+          </button>
+        </form>
       </div>
     </div>
   );
