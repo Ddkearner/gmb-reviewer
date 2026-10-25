@@ -1,34 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import { verifyPasscode } from '../utils/api';
 
 interface PasscodeLockProps {
   onSuccess: () => void;
 }
 
-const CORRECT_PIN = '124520';
-
 export const PasscodeLock: React.FC<PasscodeLockProps> = ({ onSuccess }) => {
   const [pin, setPin] = useState<string>('');
   const [error, setError] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const checkPin = async (candidate: string) => {
+    setIsVerifying(true);
+    const isValid = await verifyPasscode(candidate);
+    setIsVerifying(false);
+
+    if (isValid) {
+      onSuccess();
+    } else {
+      setError(true);
+      setTimeout(() => {
+        setPin('');
+        setError(false);
+      }, 400);
+    }
+  };
 
   const handleDigit = (digit: string) => {
-    if (pin.length < 6) {
-      const nextPin = pin + digit;
-      setPin(nextPin);
-      if (nextPin.length === 6) {
-        if (nextPin === CORRECT_PIN) {
-          onSuccess();
-        } else {
-          setError(true);
-          setTimeout(() => {
-            setPin('');
-            setError(false);
-          }, 400);
-        }
-      }
+    if (isVerifying || pin.length >= 6) return;
+    const nextPin = pin + digit;
+    setPin(nextPin);
+    if (nextPin.length === 6) {
+      checkPin(nextPin);
     }
   };
 
   const handleDelete = () => {
+    if (isVerifying) return;
     setPin(prev => prev.slice(0, -1));
   };
 
@@ -42,7 +50,7 @@ export const PasscodeLock: React.FC<PasscodeLockProps> = ({ onSuccess }) => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pin]);
+  }, [pin, isVerifying]);
 
   const numpad = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'];
 
@@ -61,7 +69,7 @@ export const PasscodeLock: React.FC<PasscodeLockProps> = ({ onSuccess }) => {
           ))}
         </div>
 
-        {/* Responsive Numpad */}
+        {/* Numpad */}
         <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full">
           {numpad.map((btn, i) => {
             if (btn === '') return <div key={i} />;
@@ -71,7 +79,8 @@ export const PasscodeLock: React.FC<PasscodeLockProps> = ({ onSuccess }) => {
                   key={i}
                   type="button"
                   onClick={handleDelete}
-                  className="w-14 h-14 sm:w-16 sm:h-16 mx-auto flex items-center justify-center text-xs sm:text-sm font-medium text-[#8E8E93] active:text-[#000000] active:scale-95"
+                  disabled={isVerifying}
+                  className="w-14 h-14 sm:w-16 sm:h-16 mx-auto flex items-center justify-center text-xs sm:text-sm font-medium text-[#8E8E93] active:text-[#000000] active:scale-95 disabled:opacity-50"
                 >
                   Delete
                 </button>
@@ -82,7 +91,8 @@ export const PasscodeLock: React.FC<PasscodeLockProps> = ({ onSuccess }) => {
                 key={i}
                 type="button"
                 onClick={() => handleDigit(btn)}
-                className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full bg-[#FFFFFF] text-xl sm:text-2xl font-medium text-[#000000] active:bg-[#E5E5EA] active:scale-95 transition-transform"
+                disabled={isVerifying}
+                className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full bg-[#FFFFFF] text-xl sm:text-2xl font-medium text-[#000000] active:bg-[#E5E5EA] active:scale-95 transition-transform disabled:opacity-50"
               >
                 {btn}
               </button>

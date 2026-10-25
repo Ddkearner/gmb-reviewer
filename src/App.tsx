@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { LandingPage } from './types';
 import {
-  getStoredLandingPages,
-  createLandingPage,
-  deleteLandingPage,
-  findLandingPageBySlug,
-  isAdminAuthenticated,
-  setAdminAuthenticated
-} from './utils/storage';
+  fetchWorkspaces,
+  createWorkspace,
+  deleteWorkspace,
+  isSessionAuthenticated
+} from './utils/api';
 import { PublicGate } from './components/PublicGate';
 import { PasscodeLock } from './components/PasscodeLock';
 import { AdminDashboard } from './components/AdminDashboard';
@@ -18,10 +16,17 @@ export default function App() {
     return window.location.pathname || '/';
   });
   const [pages, setPages] = useState<LandingPage[]>([]);
-  const [isAdminAuth, setIsAdminAuth] = useState<boolean>(() => isAdminAuthenticated());
+  const [isAdminAuth, setIsAdminAuth] = useState<boolean>(() => isSessionAuthenticated());
+  const [loading, setLoading] = useState(true);
+
+  const loadData = async () => {
+    const list = await fetchWorkspaces();
+    setPages(list);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    setPages(getStoredLandingPages());
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -41,30 +46,28 @@ export default function App() {
 
   const handleAdminSuccess = () => {
     setIsAdminAuth(true);
-    setAdminAuthenticated(true);
   };
 
-  const handleCreatePage = (pageData: Omit<LandingPage, 'id' | 'createdAt'>) => {
-    const created = createLandingPage(pageData);
-    setPages(getStoredLandingPages());
-    return created;
+  const handleCreatePage = async (pageData: Omit<LandingPage, 'id' | 'createdAt'>) => {
+    const created = await createWorkspace(pageData);
+    if (created) {
+      await loadData();
+    }
   };
 
-  const handleDeletePage = (id: string) => {
-    deleteLandingPage(id);
-    setPages(getStoredLandingPages());
+  const handleDeletePage = async (id: string) => {
+    const ok = await deleteWorkspace(id);
+    if (ok) {
+      setPages(prev => prev.filter(p => p.id !== id));
+    }
   };
 
   const trimmedPath = currentPath.replace(/^\/+|\/+$/g, '');
 
-  // 1. Secret Admin
+  // 1. Secret Admin View
   if (trimmedPath === 'secret-admin') {
     if (!isAdminAuth) {
-      return (
-        <PasscodeLock
-          onSuccess={handleAdminSuccess}
-        />
-      );
+      return <PasscodeLock onSuccess={handleAdminSuccess} />;
     }
 
     return (
@@ -77,25 +80,31 @@ export default function App() {
     );
   }
 
-  // 2. Main Public Gate (Root domain)
+  // 2. Main Public Gate (Root domain only)
   if (!trimmedPath || trimmedPath === 'index.html') {
-    return (
-      <PublicGate
-        onOpenSecretAdmin={() => navigateTo('/secret-admin')}
-      />
-    );
+    return <PublicGate />;
   }
 
   // 3. Customer Landing Page (Business Slug)
-  const matchedPage = findLandingPageBySlug(trimmedPath);
+  const matchedPage = pages.find(
+    p => p.slug.toLowerCase() === trimmedPath.toLowerCase()
+  );
 
   if (matchedPage) {
     return <CustomerLandingPage page={matchedPage} />;
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-[100dvh] w-full bg-[#F2F2F7] flex items-center justify-center">
+        <div className="w-4 h-4 rounded-full bg-[#000000] animate-pulse" />
+      </div>
+    );
+  }
+
   // 4. Fallback 404
   return (
-    <div className="min-h-screen bg-[#F2F2F7] flex flex-col items-center justify-center p-6 text-center select-none">
+    <div className="min-h-[100dvh] w-full bg-[#F2F2F7] flex flex-col items-center justify-center p-6 text-center select-none">
       <h2 className="text-xl font-bold mb-2">Page Not Found</h2>
       <button
         onClick={() => navigateTo('/')}

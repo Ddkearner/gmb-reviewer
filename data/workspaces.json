@@ -1,0 +1,41 @@
+[
+  {
+    "id": "lp-1",
+    "slug": "titan-fitness-club",
+    "businessName": "Titan Fitness Club",
+    "category": "Gym & Fitness",
+    "gmbReviewUrl": "https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4",
+    "ratingScore": 5.0,
+    "totalReviewsCount": 248,
+    "reviews": [
+      "Top tier gym equipment and cleanest workout environment in the area. Trainers are truly supportive and always motivate you to hit your goals!"
+    ],
+    "createdAt": "2026-03-01T10:00:00.000Z"
+  },
+  {
+    "id": "lp-2",
+    "slug": "apex-coaching-academy",
+    "businessName": "Apex Coaching Academy",
+    "category": "Coaching & Education",
+    "gmbReviewUrl": "https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4",
+    "ratingScore": 5.0,
+    "totalReviewsCount": 312,
+    "reviews": [
+      "Exceptional faculty and structured study material. Concept clarity and regular doubt sessions made a massive difference in my scores!"
+    ],
+    "createdAt": "2026-03-05T12:00:00.000Z"
+  },
+  {
+    "id": "lp-3",
+    "slug": "aura-dental-studio",
+    "businessName": "Aura Dental Studio",
+    "category": "Dental Clinic",
+    "gmbReviewUrl": "https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4",
+    "ratingScore": 5.0,
+    "totalReviewsCount": 185,
+    "reviews": [
+      "Virtually painless treatment! The dentist was exceptionally gentle, modern sterile equipment, and great consultation."
+    ],
+    "createdAt": "2026-03-10T14:30:00.000Z"
+  }
+]

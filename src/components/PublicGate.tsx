@@ -1,17 +1,9 @@
 import React from 'react';
 
-interface PublicGateProps {
-  onOpenSecretAdmin: () => void;
-}
-
-export const PublicGate: React.FC<PublicGateProps> = ({ onOpenSecretAdmin }) => {
+export const PublicGate: React.FC = () => {
   return (
     <div className="min-h-[100dvh] w-full bg-[#F2F2F7] flex flex-col items-center justify-center px-5 py-6 text-center select-none safe-top safe-bottom">
-      <h1 
-        onClick={onOpenSecretAdmin}
-        className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#000000] mb-2 cursor-pointer break-words max-w-xs sm:max-w-md"
-        title="Admin"
-      >
+      <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#000000] mb-2 break-words max-w-xs sm:max-w-md">
         Google My Business Reviewer
       </h1>
 
