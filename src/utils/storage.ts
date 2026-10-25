@@ -91,9 +91,11 @@ export function slugify(text: string): string {
     .replace(/-+$/, '');
 }
 
+import { generateInitialReviewPool } from '../data/seoTemplates';
+
 /**
  * Builds a universal shareable URL that works on ANY device (even with no database).
- * Encodes business details so customer phones scanning QR or opening links immediately load the page.
+ * Encodes business details and geo-targeting so customer phones scanning QR load the page perfectly.
  */
 export function buildShareableLandingPageUrl(page: LandingPage): string {
   const origin = window.location.origin;
@@ -101,13 +103,17 @@ export function buildShareableLandingPageUrl(page: LandingPage): string {
   params.set('b', page.businessName);
   params.set('c', page.category);
   params.set('u', page.gmbReviewUrl);
+  if (page.city) params.set('ct', page.city);
+  if (Array.isArray(page.nearbyAreas) && page.nearbyAreas.length > 0) {
+    params.set('na', page.nearbyAreas.join(','));
+  }
 
   return `${origin}/${page.slug}?${params.toString()}`;
 }
 
 /**
  * Extracts payload from incoming URL parameters and saves to local state.
- * Cleans the URL path with window.history.replaceState so customer sees clean clean domain.com/slug.
+ * Cleans the URL path with window.history.replaceState so customer sees clean domain.com/slug.
  */
 export function resolveIncomingUrlPayload(): LandingPage | null {
   try {
@@ -115,18 +121,26 @@ export function resolveIncomingUrlPayload(): LandingPage | null {
     const b = searchParams.get('b');
     const u = searchParams.get('u');
     const c = searchParams.get('c') || 'Local Business';
+    const ct = searchParams.get('ct') || '';
+    const na = searchParams.get('na')
+      ? searchParams.get('na')!.split(',').map(s => s.trim()).filter(Boolean)
+      : [];
     const currentSlug = window.location.pathname.replace(/^\/+|\/+$/g, '');
 
     if (currentSlug && currentSlug !== 'secret-admin' && u && b) {
+      const generatedReviews = generateInitialReviewPool(b, c, ct, na, 20);
+
       const page: LandingPage = {
         id: 'lp-' + currentSlug,
         slug: currentSlug,
         businessName: b,
         category: c,
+        city: ct || undefined,
+        nearbyAreas: na.length > 0 ? na : undefined,
         gmbReviewUrl: u,
         ratingScore: 5.0,
         totalReviewsCount: 150,
-        reviews: [getPositiveReviewForCategory(c)],
+        reviews: generatedReviews.length > 0 ? generatedReviews : [getPositiveReviewForCategory(c)],
         createdAt: new Date().toISOString()
       };
 

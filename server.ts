@@ -232,7 +232,7 @@ app.get('/api/workspaces/:slug', (req, res) => {
 });
 
 app.post('/api/workspaces', async (req, res) => {
-  const { businessName, category, gmbReviewUrl, reviews, ratingScore, totalReviewsCount } = req.body;
+  const { businessName, category, city, nearbyAreas, gmbReviewUrl, reviews, ratingScore, totalReviewsCount } = req.body;
 
   if (!businessName || !gmbReviewUrl) {
     res.status(400).json({ error: 'businessName and gmbReviewUrl are required' });
@@ -256,6 +256,10 @@ app.post('/api/workspaces', async (req, res) => {
     slug: uniqueSlug,
     businessName: businessName.trim(),
     category: category || 'Local Business',
+    city: city ? city.trim() : undefined,
+    nearbyAreas: Array.isArray(nearbyAreas)
+      ? nearbyAreas.map((a: string) => a.trim()).filter(Boolean)
+      : undefined,
     gmbReviewUrl: finalReviewUrl,
     ratingScore: ratingScore || 5.0,
     totalReviewsCount: totalReviewsCount || 150,

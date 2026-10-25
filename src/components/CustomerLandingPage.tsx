@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LandingPage } from '../types';
+import { generateDynamicReview } from '../data/seoTemplates';
 
 interface CustomerLandingPageProps {
   page: LandingPage;
@@ -8,7 +9,18 @@ interface CustomerLandingPageProps {
 export const CustomerLandingPage: React.FC<CustomerLandingPageProps> = ({ page }) => {
   const [copied, setCopied] = useState(false);
 
-  const reviewText = page.reviews?.[0] || 'Outstanding service and very polite staff! Highly recommend this place.';
+  const [reviewText] = useState<string>(() => {
+    if (Array.isArray(page.reviews) && page.reviews.length > 1) {
+      const randomIndex = Math.floor(Math.random() * page.reviews.length);
+      return page.reviews[randomIndex];
+    }
+    return generateDynamicReview(
+      page.businessName,
+      page.category,
+      page.city,
+      page.nearbyAreas
+    );
+  });
 
   const handleCopyAndReview = () => {
     try {

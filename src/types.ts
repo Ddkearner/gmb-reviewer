@@ -8,6 +8,8 @@ export interface LandingPage {
   slug: string;
   businessName: string;
   category: string;
+  city?: string;
+  nearbyAreas?: string[];
   tagline?: string;
   gmbReviewUrl: string;
   ratingScore: number;

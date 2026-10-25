@@ -3,6 +3,7 @@ import { CATEGORIES } from '../data/categories';
 import { LandingPage } from '../types';
 import { slugify } from '../utils/storage';
 import { normalizeGmbReviewUrl } from '../utils/gmb';
+import { generateInitialReviewPool } from '../data/seoTemplates';
 
 interface CreatePageModalProps {
   onClose: () => void;
@@ -15,6 +16,8 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
 }) => {
   const [businessName, setBusinessName] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0].name);
+  const [city, setCity] = useState('');
+  const [nearbyAreas, setNearbyAreas] = useState('');
   const [gmbReviewUrl, setGmbReviewUrl] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -39,14 +42,25 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
         return;
       }
 
-      const matchedCat = CATEGORIES.find(c => c.name === category);
-      const reviews = matchedCat ? matchedCat.defaultReviews : [
-        'Outstanding service and very polite staff! Highly recommend this place.'
-      ];
+      const cleanNearby = nearbyAreas
+        .split(',')
+        .map(a => a.trim())
+        .filter(Boolean);
+
+      // Generate initial diverse pool of 20 keyword-rich local SEO reviews
+      const reviews = generateInitialReviewPool(
+        businessName.trim(),
+        category,
+        city.trim() || undefined,
+        cleanNearby.length > 0 ? cleanNearby : undefined,
+        20
+      );
 
       await onSave({
         businessName: businessName.trim(),
         category,
+        city: city.trim() || undefined,
+        nearbyAreas: cleanNearby.length > 0 ? cleanNearby : undefined,
         slug: slugify(businessName),
         gmbReviewUrl: normalizedUrl,
         ratingScore: 5.0,
@@ -61,7 +75,7 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
-      <div className="w-full max-w-sm bg-[#FFFFFF] rounded-3xl p-5 sm:p-6 text-[#000000] my-auto">
+      <div className="w-full max-w-sm bg-[#FFFFFF] rounded-3xl p-5 sm:p-6 text-[#000000] my-auto max-h-[92vh] overflow-y-auto">
         <h2 className="text-lg sm:text-xl font-bold tracking-tight mb-4">
           Create Landing Page
         </h2>
@@ -102,6 +116,34 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[#8E8E93] mb-1">
+              City / Town
+            </label>
+            <input
+              type="text"
+              value={city}
+              onChange={e => setCity(e.target.value)}
+              placeholder="e.g. Kanpur"
+              className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none disabled:opacity-60"
+              disabled={isGenerating}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[#8E8E93] mb-1">
+              Nearby Areas / Localities <span className="text-[10px] font-normal text-[#8E8E93]">(comma separated)</span>
+            </label>
+            <input
+              type="text"
+              value={nearbyAreas}
+              onChange={e => setNearbyAreas(e.target.value)}
+              placeholder="e.g. Indiranagar, Kakadeo"
+              className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none disabled:opacity-60"
+              disabled={isGenerating}
+            />
           </div>
 
           <div>
