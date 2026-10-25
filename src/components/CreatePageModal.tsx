@@ -16,27 +16,47 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
   const [businessName, setBusinessName] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0].name);
   const [gmbReviewUrl, setGmbReviewUrl] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!businessName.trim() || !gmbReviewUrl.trim()) return;
 
-    const matchedCat = CATEGORIES.find(c => c.name === category);
-    const reviews = matchedCat ? matchedCat.defaultReviews : [
-      'Outstanding service and very polite staff! Highly recommend this place.'
-    ];
+    setIsGenerating(true);
+    setErrorMsg('');
 
-    const normalizedUrl = await normalizeGmbReviewUrl(gmbReviewUrl.trim());
+    try {
+      const normalizedUrl = await normalizeGmbReviewUrl(gmbReviewUrl.trim());
 
-    onSave({
-      businessName: businessName.trim(),
-      category,
-      slug: slugify(businessName),
-      gmbReviewUrl: normalizedUrl,
-      ratingScore: 5.0,
-      totalReviewsCount: 150,
-      reviews
-    });
+      // Ensure Place ID was actually resolved and not left as a raw shortlink
+      if (
+        normalizedUrl.includes('maps.app.goo.gl') ||
+        normalizedUrl.includes('goo.gl/maps')
+      ) {
+        setErrorMsg('Could not find Place ID from this short link. Please verify the Google Maps link.');
+        setIsGenerating(false);
+        return;
+      }
+
+      const matchedCat = CATEGORIES.find(c => c.name === category);
+      const reviews = matchedCat ? matchedCat.defaultReviews : [
+        'Outstanding service and very polite staff! Highly recommend this place.'
+      ];
+
+      await onSave({
+        businessName: businessName.trim(),
+        category,
+        slug: slugify(businessName),
+        gmbReviewUrl: normalizedUrl,
+        ratingScore: 5.0,
+        totalReviewsCount: 150,
+        reviews
+      });
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Failed to extract Place ID. Please try again.');
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -54,11 +74,15 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
             <input
               type="text"
               value={businessName}
-              onChange={e => setBusinessName(e.target.value)}
+              onChange={e => {
+                setBusinessName(e.target.value);
+                if (errorMsg) setErrorMsg('');
+              }}
               placeholder="e.g. Iron Titan Gym"
               className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none"
               required
               autoFocus
+              disabled={isGenerating}
             />
           </div>
 
@@ -69,7 +93,8 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
             <select
               value={category}
               onChange={e => setCategory(e.target.value)}
-              className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none cursor-pointer"
+              disabled={isGenerating}
+              className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none cursor-pointer disabled:opacity-60"
             >
               {CATEGORIES.map(cat => (
                 <option key={cat.id} value={cat.name}>
@@ -86,26 +111,38 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
             <input
               type="url"
               value={gmbReviewUrl}
-              onChange={e => setGmbReviewUrl(e.target.value)}
+              onChange={e => {
+                setGmbReviewUrl(e.target.value);
+                if (errorMsg) setErrorMsg('');
+              }}
               placeholder="https://g.page/r/.../review"
-              className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none"
+              className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none disabled:opacity-60"
               required
+              disabled={isGenerating}
             />
           </div>
+
+          {errorMsg && (
+            <p className="text-xs text-red-600 font-medium text-center">
+              {errorMsg}
+            </p>
+          )}
 
           <div className="pt-2 flex gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 min-h-[46px] rounded-full bg-[#F2F2F7] text-xs font-bold text-[#000000] active:scale-95"
+              disabled={isGenerating}
+              className="flex-1 min-h-[46px] rounded-full bg-[#F2F2F7] text-xs font-bold text-[#000000] active:scale-95 disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 min-h-[46px] rounded-full bg-[#000000] text-xs font-bold text-[#FFFFFF] active:scale-95"
+              disabled={isGenerating}
+              className="flex-1 min-h-[46px] rounded-full bg-[#000000] text-xs font-bold text-[#FFFFFF] active:scale-95 disabled:opacity-50 flex items-center justify-center"
             >
-              Generate
+              {isGenerating ? 'Generating...' : 'Generate'}
             </button>
           </div>
         </form>

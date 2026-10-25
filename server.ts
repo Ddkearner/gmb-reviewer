@@ -122,6 +122,24 @@ async function normalizeGmbUrlAsync(input: string): Promise<string> {
     trimmed.includes('page.link');
 
   if (isShort) {
+    // Step 1: Manual redirect
+    try {
+      const manualRes = await fetch(trimmed, {
+        method: 'GET',
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        },
+        redirect: 'manual'
+      });
+      const location = manualRes.headers.get('location') || '';
+      const locPid = extractPlaceId(location);
+      if (locPid) {
+        return `https://search.google.com/local/writereview?placeid=${locPid}`;
+      }
+    } catch {}
+
+    // Step 2: Follow redirect
     try {
       const response = await fetch(trimmed, {
         method: 'GET',
@@ -141,9 +159,22 @@ async function normalizeGmbUrlAsync(input: string): Promise<string> {
       if (pid) {
         return `https://search.google.com/local/writereview?placeid=${pid}`;
       }
-    } catch {
-      // Fallback to original
-    }
+    } catch {}
+
+    // Step 3: Fallback unshortener
+    try {
+      const unshortRes = await fetch(
+        `https://unshorten.me/json/${encodeURIComponent(trimmed)}`
+      );
+      if (unshortRes.ok) {
+        const data = await unshortRes.json();
+        const resolved = data.resolved_url || '';
+        const fallbackPid = extractPlaceId(resolved);
+        if (fallbackPid) {
+          return `https://search.google.com/local/writereview?placeid=${fallbackPid}`;
+        }
+      }
+    } catch {}
   }
 
   return trimmed;

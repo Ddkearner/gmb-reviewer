@@ -45,23 +45,26 @@ export function hexToPlaceId(hex1: string, hex2: string): string {
  */
 export function extractPlaceIdFromText(input: string): string | null {
   if (!input) return null;
-  const trimmed = input.trim();
+  let decoded = input.trim();
+  try {
+    decoded = decodeURIComponent(decoded);
+  } catch {}
 
   // 1. Explicit Place ID (e.g. ChIJ2_tRJwC3nTkRKd7dPr0k_kY)
-  const directMatch = trimmed.match(/\b(ChIJ[a-zA-Z0-9_-]{20,})\b/);
+  const directMatch = decoded.match(/\b(ChIJ[a-zA-Z0-9_-]{20,})\b/);
   if (directMatch) {
     return directMatch[1];
   }
 
   // 2. Hex pair in Google Maps URL (e.g. 0x399db7002751fbdb:0x46fe24bd3eddde29)
-  const hexMatch = trimmed.match(/(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]+)/);
+  const hexMatch = decoded.match(/(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]+)/);
   if (hexMatch) {
     const pid = hexToPlaceId(hexMatch[1], hexMatch[2]);
     if (pid) return pid;
   }
 
   // 3. Place ID in query parameter (?placeid=ChIJ...)
-  const paramMatch = trimmed.match(/[?&]placeid=([^&#\s]+)/i);
+  const paramMatch = decoded.match(/[?&]placeid=([^&#\s]+)/i);
   if (paramMatch) {
     return paramMatch[1];
   }
@@ -71,13 +74,14 @@ export function extractPlaceIdFromText(input: string): string | null {
 
 /**
  * Normalizes any Google business / maps link into a direct 5-star review URL.
- * Automatically resolves short links (maps.app.goo.gl) via the backend / Vercel API.
+ * Automatically resolves short links (maps.app.goo.gl) on the fly.
+ * Guarantees that only a valid review URL with placeid is returned.
  */
 export async function normalizeGmbReviewUrl(input: string): Promise<string> {
   if (!input) return '';
   const trimmed = input.trim();
 
-  // Already a direct review URL
+  // Already a direct review URL with placeid
   if (trimmed.includes('search.google.com/local/writereview')) {
     return trimmed;
   }
@@ -87,19 +91,20 @@ export async function normalizeGmbReviewUrl(input: string): Promise<string> {
     return trimmed;
   }
 
-  // Fast offline check (Place ID or full Maps URL with hex)
+  // 1. Fast offline check (Place ID or full Maps URL with hex coordinates/cid)
   const offlinePlaceId = extractPlaceIdFromText(trimmed);
   if (offlinePlaceId) {
     return `https://search.google.com/local/writereview?placeid=${offlinePlaceId}`;
   }
 
-  // If it's a short link (maps.app.goo.gl or goo.gl/maps), resolve via backend / Vercel API
+  // 2. If it's a short link (maps.app.goo.gl or goo.gl/maps), resolve via backend / Vercel API
   const isShortLink =
     trimmed.includes('maps.app.goo.gl') ||
     trimmed.includes('goo.gl/maps') ||
     trimmed.includes('page.link');
 
   if (isShortLink) {
+    // Strategy A: Call /api/resolve (Vercel Serverless / Express)
     try {
       const res = await fetch('/api/resolve', {
         method: 'POST',
@@ -109,15 +114,32 @@ export async function normalizeGmbReviewUrl(input: string): Promise<string> {
 
       if (res.ok) {
         const data = await res.json();
-        if (data.reviewUrl) {
-          return data.reviewUrl;
-        }
         if (data.placeId) {
           return `https://search.google.com/local/writereview?placeid=${data.placeId}`;
         }
+        if (data.reviewUrl && !data.reviewUrl.includes('maps.app.goo.gl')) {
+          return data.reviewUrl;
+        }
       }
     } catch {
-      // Backend not reachable; fallback to original URL gracefully
+      // Backend request failed, continue to fallback
+    }
+
+    // Strategy B: Fallback unshortener (runs directly in browser/client if backend was unreachable)
+    try {
+      const unshortRes = await fetch(
+        `https://unshorten.me/json/${encodeURIComponent(trimmed)}`
+      );
+      if (unshortRes.ok) {
+        const data = await unshortRes.json();
+        const resolved = data.resolved_url || '';
+        const pid = extractPlaceIdFromText(resolved);
+        if (pid) {
+          return `https://search.google.com/local/writereview?placeid=${pid}`;
+        }
+      }
+    } catch {
+      // Fallback failed
     }
   }
 

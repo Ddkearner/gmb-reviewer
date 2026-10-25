@@ -37,20 +37,24 @@ function hexToPlaceId(hex1: string, hex2: string): string {
 
 function extractPlaceId(text: string): string | null {
   if (!text) return null;
+  let decoded = text;
+  try {
+    decoded = decodeURIComponent(text);
+  } catch {}
 
   // 1. Direct Place ID
-  const directMatch = text.match(/\b(ChIJ[a-zA-Z0-9_-]{20,})\b/);
+  const directMatch = decoded.match(/\b(ChIJ[a-zA-Z0-9_-]{20,})\b/);
   if (directMatch) return directMatch[1];
 
   // 2. Hex pair (0x...:0x...)
-  const hexMatch = text.match(/(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]+)/);
+  const hexMatch = decoded.match(/(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]+)/);
   if (hexMatch) {
     const pid = hexToPlaceId(hexMatch[1], hexMatch[2]);
     if (pid) return pid;
   }
 
   // 3. Query param placeid
-  const paramMatch = text.match(/[?&]placeid=([^&#\s]+)/i);
+  const paramMatch = decoded.match(/[?&]placeid=([^&#\s]+)/i);
   if (paramMatch) return paramMatch[1];
 
   return null;
@@ -83,6 +87,29 @@ export default async function handler(req: any, res: any) {
     });
   }
 
+  // Step 1: Follow manual redirects to inspect Location header
+  try {
+    const manualResponse = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      },
+      redirect: 'manual'
+    });
+
+    const location = manualResponse.headers.get('location') || '';
+    const locPid = extractPlaceId(location);
+    if (locPid) {
+      return res.json({
+        success: true,
+        placeId: locPid,
+        reviewUrl: `https://search.google.com/local/writereview?placeid=${locPid}`
+      });
+    }
+  } catch {}
+
+  // Step 2: Try follow redirect and inspect response URL + HTML
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -108,17 +135,30 @@ export default async function handler(req: any, res: any) {
         reviewUrl: `https://search.google.com/local/writereview?placeid=${placeId}`
       });
     }
+  } catch {}
 
-    return res.json({
-      success: false,
-      url: finalUrl || url,
-      reviewUrl: url
-    });
-  } catch (error: any) {
-    return res.status(500).json({
-      error: 'Failed to resolve URL',
-      details: error?.message || 'Unknown error',
-      reviewUrl: url
-    });
-  }
+  // Step 3: Fallback unshortener
+  try {
+    const fallbackRes = await fetch(
+      `https://unshorten.me/json/${encodeURIComponent(url)}`
+    );
+    if (fallbackRes.ok) {
+      const data = await fallbackRes.json();
+      const resolved = data.resolved_url || '';
+      const fallbackPid = extractPlaceId(resolved);
+      if (fallbackPid) {
+        return res.json({
+          success: true,
+          placeId: fallbackPid,
+          reviewUrl: `https://search.google.com/local/writereview?placeid=${fallbackPid}`
+        });
+      }
+    }
+  } catch {}
+
+  return res.json({
+    success: false,
+    url,
+    reviewUrl: url
+  });
 }
