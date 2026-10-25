@@ -6,6 +6,7 @@ import {
   findLandingPageBySlug,
   saveLandingPages
 } from './storage';
+import { normalizeGmbReviewUrl } from './gmb';
 
 const AUTH_KEY = 'gmb_admin_auth';
 
@@ -68,8 +69,14 @@ export async function fetchWorkspaces(): Promise<LandingPage[]> {
 export async function createWorkspace(
   pageData: Omit<LandingPage, 'id' | 'createdAt'>
 ): Promise<LandingPage> {
+  const normalizedReviewUrl = await normalizeGmbReviewUrl(pageData.gmbReviewUrl);
+  const dataToSave = {
+    ...pageData,
+    gmbReviewUrl: normalizedReviewUrl
+  };
+
   // 1. Immediately save locally so generation ALWAYS works on Vercel!
-  const created = createLandingPage(pageData);
+  const created = createLandingPage(dataToSave);
 
   // 2. Try background sync if server is running
   try {

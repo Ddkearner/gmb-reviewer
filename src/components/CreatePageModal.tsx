@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CATEGORIES } from '../data/categories';
 import { LandingPage } from '../types';
 import { slugify } from '../utils/storage';
+import { normalizeGmbReviewUrl } from '../utils/gmb';
 
 interface CreatePageModalProps {
   onClose: () => void;
@@ -16,7 +17,7 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
   const [category, setCategory] = useState(CATEGORIES[0].name);
   const [gmbReviewUrl, setGmbReviewUrl] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!businessName.trim() || !gmbReviewUrl.trim()) return;
 
@@ -25,11 +26,13 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
       'Outstanding service and very polite staff! Highly recommend this place.'
     ];
 
+    const normalizedUrl = await normalizeGmbReviewUrl(gmbReviewUrl.trim());
+
     onSave({
       businessName: businessName.trim(),
       category,
       slug: slugify(businessName),
-      gmbReviewUrl: gmbReviewUrl.trim(),
+      gmbReviewUrl: normalizedUrl,
       ratingScore: 5.0,
       totalReviewsCount: 150,
       reviews

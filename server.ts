@@ -53,6 +53,102 @@ function slugify(text: string): string {
     .replace(/-+$/, '');
 }
 
+function hexToPlaceId(hex1: string, hex2: string): string {
+  try {
+    const cleanHex1 = hex1.startsWith('0x') ? hex1 : `0x${hex1}`;
+    const cleanHex2 = hex2.startsWith('0x') ? hex2 : `0x${hex2}`;
+
+    const u1 = BigInt(cleanHex1);
+    const u2 = BigInt(cleanHex2);
+
+    const bytes = new Uint8Array(20);
+    bytes[0] = 0x0a;
+    bytes[1] = 0x12;
+    bytes[2] = 0x09;
+
+    const view = new DataView(bytes.buffer);
+    view.setBigUint64(3, u1, true);
+    bytes[11] = 0x11;
+    view.setBigUint64(12, u2, true);
+
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+
+    return Buffer.from(binary, 'binary')
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+  } catch {
+    return '';
+  }
+}
+
+function extractPlaceId(text: string): string | null {
+  if (!text) return null;
+  const directMatch = text.match(/\b(ChIJ[a-zA-Z0-9_-]{20,})\b/);
+  if (directMatch) return directMatch[1];
+
+  const hexMatch = text.match(/(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]+)/);
+  if (hexMatch) {
+    const pid = hexToPlaceId(hexMatch[1], hexMatch[2]);
+    if (pid) return pid;
+  }
+
+  const paramMatch = text.match(/[?&]placeid=([^&#\s]+)/i);
+  if (paramMatch) return paramMatch[1];
+
+  return null;
+}
+
+async function normalizeGmbUrlAsync(input: string): Promise<string> {
+  if (!input) return '';
+  const trimmed = input.trim();
+
+  if (trimmed.includes('search.google.com/local/writereview') || trimmed.includes('g.page/r/')) {
+    return trimmed;
+  }
+
+  const instant = extractPlaceId(trimmed);
+  if (instant) {
+    return `https://search.google.com/local/writereview?placeid=${instant}`;
+  }
+
+  const isShort =
+    trimmed.includes('maps.app.goo.gl') ||
+    trimmed.includes('goo.gl/maps') ||
+    trimmed.includes('page.link');
+
+  if (isShort) {
+    try {
+      const response = await fetch(trimmed, {
+        method: 'GET',
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        },
+        redirect: 'follow'
+      });
+
+      const finalUrl = response.url || '';
+      let pid = extractPlaceId(finalUrl);
+      if (!pid) {
+        const html = await response.text();
+        pid = extractPlaceId(html);
+      }
+      if (pid) {
+        return `https://search.google.com/local/writereview?placeid=${pid}`;
+      }
+    } catch {
+      // Fallback to original
+    }
+  }
+
+  return trimmed;
+}
+
 // 1. Passcode Authentication API
 app.post('/api/auth/verify', (req, res) => {
   const { passcode } = req.body;
@@ -69,7 +165,25 @@ app.post('/api/auth/verify', (req, res) => {
   }
 });
 
-// 2. Workspaces CRUD API
+// 2. Google Maps Shortlink / Place ID Resolver API
+app.post('/api/resolve', async (req, res) => {
+  const rawUrl = req.body?.url || req.query?.url;
+  if (!rawUrl || typeof rawUrl !== 'string') {
+    res.status(400).json({ error: 'url is required' });
+    return;
+  }
+
+  const resolvedReviewUrl = await normalizeGmbUrlAsync(rawUrl);
+  const placeId = extractPlaceId(resolvedReviewUrl);
+
+  res.json({
+    success: true,
+    placeId: placeId || null,
+    reviewUrl: resolvedReviewUrl
+  });
+});
+
+// 3. Workspaces CRUD API
 app.get('/api/workspaces', (_req, res) => {
   const list = readWorkspaces();
   res.json(list);
@@ -86,7 +200,7 @@ app.get('/api/workspaces/:slug', (req, res) => {
   }
 });
 
-app.post('/api/workspaces', (req, res) => {
+app.post('/api/workspaces', async (req, res) => {
   const { businessName, category, gmbReviewUrl, reviews, ratingScore, totalReviewsCount } = req.body;
 
   if (!businessName || !gmbReviewUrl) {
@@ -104,12 +218,14 @@ app.post('/api/workspaces', (req, res) => {
     uniqueSlug = `${baseSlug}-${counter}`;
   }
 
+  const finalReviewUrl = await normalizeGmbUrlAsync(gmbReviewUrl);
+
   const newWorkspace = {
     id: 'lp-' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
     slug: uniqueSlug,
     businessName: businessName.trim(),
     category: category || 'Local Business',
-    gmbReviewUrl: gmbReviewUrl.trim(),
+    gmbReviewUrl: finalReviewUrl,
     ratingScore: ratingScore || 5.0,
     totalReviewsCount: totalReviewsCount || 150,
     reviews: Array.isArray(reviews) && reviews.length > 0 ? reviews : [
