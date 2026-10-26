@@ -232,7 +232,19 @@ app.get('/api/workspaces/:slug', (req, res) => {
 });
 
 app.post('/api/workspaces', async (req, res) => {
-  const { businessName, category, city, nearbyAreas, gmbReviewUrl, reviews, ratingScore, totalReviewsCount } = req.body;
+  const {
+    businessName,
+    category,
+    subcategory,
+    languages,
+    city,
+    nearbyAreas,
+    gmbReviewUrl,
+    reviews,
+    reviewsByLang,
+    ratingScore,
+    totalReviewsCount
+  } = req.body;
 
   if (!businessName || !gmbReviewUrl) {
     res.status(400).json({ error: 'businessName and gmbReviewUrl are required' });
@@ -256,6 +268,8 @@ app.post('/api/workspaces', async (req, res) => {
     slug: uniqueSlug,
     businessName: businessName.trim(),
     category: category || 'Local Business',
+    subcategory: subcategory || undefined,
+    languages: Array.isArray(languages) ? languages : ['en', 'hi', 'hinglish'],
     city: city ? city.trim() : undefined,
     nearbyAreas: Array.isArray(nearbyAreas)
       ? nearbyAreas.map((a: string) => a.trim()).filter(Boolean)
@@ -266,6 +280,7 @@ app.post('/api/workspaces', async (req, res) => {
     reviews: Array.isArray(reviews) && reviews.length > 0 ? reviews : [
       'Outstanding service and very polite staff! Highly recommend this place.'
     ],
+    reviewsByLang: reviewsByLang || undefined,
     createdAt: new Date().toISOString()
   };
 

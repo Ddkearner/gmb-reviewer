@@ -103,6 +103,10 @@ export function buildShareableLandingPageUrl(page: LandingPage): string {
   params.set('b', page.businessName);
   params.set('c', page.category);
   params.set('u', page.gmbReviewUrl);
+  if (page.subcategory) params.set('sc', page.subcategory);
+  if (Array.isArray(page.languages) && page.languages.length > 0) {
+    params.set('lng', page.languages.join(','));
+  }
   if (page.city) params.set('ct', page.city);
   if (Array.isArray(page.nearbyAreas) && page.nearbyAreas.length > 0) {
     params.set('na', page.nearbyAreas.join(','));
@@ -121,6 +125,11 @@ export function resolveIncomingUrlPayload(): LandingPage | null {
     const b = searchParams.get('b');
     const u = searchParams.get('u');
     const c = searchParams.get('c') || 'Local Business';
+    const sc = searchParams.get('sc') || undefined;
+    const lngRaw = searchParams.get('lng');
+    const parsedLangs: ('en' | 'hi' | 'hinglish')[] = lngRaw
+      ? (lngRaw.split(',').filter(l => ['en', 'hi', 'hinglish'].includes(l)) as ('en' | 'hi' | 'hinglish')[])
+      : ['en', 'hi', 'hinglish'];
     const ct = searchParams.get('ct') || '';
     const na = searchParams.get('na')
       ? searchParams.get('na')!.split(',').map(s => s.trim()).filter(Boolean)
@@ -128,19 +137,30 @@ export function resolveIncomingUrlPayload(): LandingPage | null {
     const currentSlug = window.location.pathname.replace(/^\/+|\/+$/g, '');
 
     if (currentSlug && currentSlug !== 'secret-admin' && u && b) {
-      const generatedReviews = generateInitialReviewPool(b, c, ct, na, 20);
+      const { flatReviews, reviewsByLang } = generateInitialReviewPool(
+        b,
+        c,
+        sc,
+        ct || undefined,
+        na.length > 0 ? na : undefined,
+        30,
+        parsedLangs
+      );
 
       const page: LandingPage = {
         id: 'lp-' + currentSlug,
         slug: currentSlug,
         businessName: b,
         category: c,
+        subcategory: sc,
+        languages: parsedLangs,
         city: ct || undefined,
         nearbyAreas: na.length > 0 ? na : undefined,
         gmbReviewUrl: u,
         ratingScore: 5.0,
         totalReviewsCount: 150,
-        reviews: generatedReviews.length > 0 ? generatedReviews : [getPositiveReviewForCategory(c)],
+        reviews: flatReviews.length > 0 ? flatReviews : [getPositiveReviewForCategory(c)],
+        reviewsByLang,
         createdAt: new Date().toISOString()
       };
 

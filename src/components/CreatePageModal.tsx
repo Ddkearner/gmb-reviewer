@@ -16,11 +16,41 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
 }) => {
   const [businessName, setBusinessName] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0].name);
+  const currentCategoryObj = CATEGORIES.find(c => c.name === category) || CATEGORIES[0];
+  const [subcategory, setSubcategory] = useState(
+    currentCategoryObj.subcategories[0]?.name || ''
+  );
+  const [languages, setLanguages] = useState<('en' | 'hi' | 'hinglish')[]>([
+    'en',
+    'hi',
+    'hinglish'
+  ]);
   const [city, setCity] = useState('');
   const [nearbyAreas, setNearbyAreas] = useState('');
   const [gmbReviewUrl, setGmbReviewUrl] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const handleCategoryChange = (newCatName: string) => {
+    setCategory(newCatName);
+    const catObj = CATEGORIES.find(c => c.name === newCatName);
+    if (catObj && catObj.subcategories.length > 0) {
+      setSubcategory(catObj.subcategories[0].name);
+    } else {
+      setSubcategory('');
+    }
+  };
+
+  const toggleLanguage = (lang: 'en' | 'hi' | 'hinglish') => {
+    setLanguages(prev => {
+      if (prev.includes(lang)) {
+        if (prev.length === 1) return prev; // At least one language must remain
+        return prev.filter(l => l !== lang);
+      } else {
+        return [...prev, lang];
+      }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,25 +77,30 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
         .map(a => a.trim())
         .filter(Boolean);
 
-      // Generate initial diverse pool of 20 keyword-rich local SEO reviews
-      const reviews = generateInitialReviewPool(
+      // Generate initial diverse multi-language pool of keyword-rich local SEO reviews
+      const { flatReviews, reviewsByLang } = generateInitialReviewPool(
         businessName.trim(),
         category,
+        subcategory || undefined,
         city.trim() || undefined,
         cleanNearby.length > 0 ? cleanNearby : undefined,
-        20
+        30,
+        languages
       );
 
       await onSave({
         businessName: businessName.trim(),
         category,
+        subcategory: subcategory || undefined,
+        languages,
         city: city.trim() || undefined,
         nearbyAreas: cleanNearby.length > 0 ? cleanNearby : undefined,
         slug: slugify(businessName),
         gmbReviewUrl: normalizedUrl,
         ratingScore: 5.0,
         totalReviewsCount: 150,
-        reviews
+        reviews: flatReviews,
+        reviewsByLang
       });
     } catch (err: any) {
       setErrorMsg(err?.message || 'Failed to extract Place ID. Please try again.');
@@ -106,7 +141,7 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
             </label>
             <select
               value={category}
-              onChange={e => setCategory(e.target.value)}
+              onChange={e => handleCategoryChange(e.target.value)}
               disabled={isGenerating}
               className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none cursor-pointer disabled:opacity-60"
             >
@@ -116,6 +151,62 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
                 </option>
               ))}
             </select>
+          </div>
+
+          {currentCategoryObj.subcategories.length > 0 && (
+            <div>
+              <label className="block text-xs font-semibold text-[#8E8E93] mb-1">
+                Subcategory / Specialization
+              </label>
+              <select
+                value={subcategory}
+                onChange={e => setSubcategory(e.target.value)}
+                disabled={isGenerating}
+                className="w-full bg-[#F2F2F7] rounded-xl px-4 py-3 text-base text-[#000000] focus:outline-none cursor-pointer disabled:opacity-60"
+              >
+                {currentCategoryObj.subcategories.map(sub => (
+                  <option key={sub.id} value={sub.name}>
+                    {sub.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold text-[#8E8E93]">
+                Review Languages (Multi-select)
+              </label>
+              <span className="text-[10px] text-[#8E8E93] font-medium">
+                {languages.length} selected
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: 'en' as const, label: 'English', flag: '🇬🇧' },
+                { id: 'hi' as const, label: 'हिन्दी', flag: '🇮🇳' },
+                { id: 'hinglish' as const, label: 'Hinglish', flag: '💬' }
+              ].map(item => {
+                const isSelected = languages.includes(item.id);
+                return (
+                  <button
+                    type="button"
+                    key={item.id}
+                    onClick={() => toggleLanguage(item.id)}
+                    disabled={isGenerating}
+                    className={`py-2 px-2 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 active:scale-95 disabled:opacity-60 ${
+                      isSelected
+                        ? 'bg-[#000000] text-[#FFFFFF] border-[#000000] shadow-sm'
+                        : 'bg-[#F2F2F7] text-[#8E8E93] border-transparent hover:text-[#000000]'
+                    }`}
+                  >
+                    <span className="text-sm">{item.flag}</span>
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div>

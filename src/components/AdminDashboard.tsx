@@ -91,9 +91,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <h2 className="text-sm sm:text-base font-bold text-[#000000] truncate">
                     {page.businessName}
                   </h2>
-                  <span className="text-xs text-[#8E8E93] font-mono block truncate">
-                    /{page.slug}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                    <span className="text-xs text-[#8E8E93] font-mono">
+                      /{page.slug}
+                    </span>
+                    <span className="text-[10px] text-[#C7C7CC]">•</span>
+                    <span className="text-[11px] font-medium text-[#48484A] truncate max-w-[150px] sm:max-w-[200px]">
+                      {page.subcategory || page.category}
+                    </span>
+                    {Array.isArray(page.languages) && page.languages.length > 0 && (
+                      <>
+                        <span className="text-[10px] text-[#C7C7CC]">•</span>
+                        <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded-full bg-[#F2F2F7] text-[#636366]">
+                          {page.languages.join('/')}
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 {/* Real Working Actions */}
