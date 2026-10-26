@@ -2,6 +2,7 @@ import { LandingPage } from '../types';
 import {
   getStoredLandingPages,
   createLandingPage,
+  updateLandingPage,
   deleteLandingPage,
   findLandingPageBySlug,
   saveLandingPages
@@ -88,6 +89,30 @@ export async function createWorkspace(
   } catch {}
 
   return created;
+}
+
+export async function updateWorkspace(
+  page: LandingPage
+): Promise<LandingPage> {
+  const normalizedReviewUrl = await normalizeGmbReviewUrl(page.gmbReviewUrl);
+  const dataToSave: LandingPage = {
+    ...page,
+    gmbReviewUrl: normalizedReviewUrl
+  };
+
+  // 1. Immediately update locally
+  const updated = updateLandingPage(dataToSave);
+
+  // 2. Try background sync if server is running
+  try {
+    fetch(`/api/workspaces/${page.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dataToSave)
+    }).catch(() => {});
+  } catch {}
+
+  return updated;
 }
 
 export async function deleteWorkspace(id: string): Promise<boolean> {

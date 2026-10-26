@@ -292,6 +292,57 @@ app.post('/api/workspaces', async (req, res) => {
   res.status(201).json(newWorkspace);
 });
 
+app.put('/api/workspaces/:id', async (req, res) => {
+  const { id } = req.params;
+  const list = readWorkspaces();
+  const index = list.findIndex((item: any) => item.id === id);
+
+  if (index === -1) {
+    res.status(404).json({ error: 'Workspace not found' });
+    return;
+  }
+
+  const existing = list[index];
+  const {
+    businessName,
+    category,
+    subcategory,
+    language,
+    languages,
+    city,
+    nearbyAreas,
+    gmbReviewUrl,
+    reviews,
+    reviewsByLang
+  } = req.body;
+
+  let finalReviewUrl = existing.gmbReviewUrl;
+  if (gmbReviewUrl && gmbReviewUrl !== existing.gmbReviewUrl) {
+    finalReviewUrl = await normalizeGmbUrlAsync(gmbReviewUrl);
+  }
+
+  const updatedWorkspace = {
+    ...existing,
+    businessName: businessName ? businessName.trim() : existing.businessName,
+    category: category || existing.category,
+    subcategory: subcategory !== undefined ? subcategory : existing.subcategory,
+    language: language || existing.language,
+    languages: Array.isArray(languages) ? languages : existing.languages,
+    city: city !== undefined ? (city ? city.trim() : undefined) : existing.city,
+    nearbyAreas: Array.isArray(nearbyAreas)
+      ? nearbyAreas.map((a: string) => a.trim()).filter(Boolean)
+      : existing.nearbyAreas,
+    gmbReviewUrl: finalReviewUrl,
+    reviews: Array.isArray(reviews) && reviews.length > 0 ? reviews : existing.reviews,
+    reviewsByLang: reviewsByLang !== undefined ? reviewsByLang : existing.reviewsByLang,
+    updatedAt: new Date().toISOString()
+  };
+
+  list[index] = updatedWorkspace;
+  writeWorkspaces(list);
+  res.json(updatedWorkspace);
+});
+
 app.delete('/api/workspaces/:id', (req, res) => {
   const { id } = req.params;
   const list = readWorkspaces();

@@ -7,23 +7,28 @@ import { generateInitialReviewPool } from '../data/seoTemplates';
 
 interface CreatePageModalProps {
   onClose: () => void;
-  onSave: (pageData: Omit<LandingPage, 'id' | 'createdAt'>) => void;
+  onSave: (pageData: Omit<LandingPage, 'id' | 'createdAt'> | LandingPage) => Promise<void> | void;
+  initialPage?: LandingPage | null;
 }
 
 export const CreatePageModal: React.FC<CreatePageModalProps> = ({
   onClose,
-  onSave
+  onSave,
+  initialPage
 }) => {
-  const [businessName, setBusinessName] = useState('');
-  const [category, setCategory] = useState(CATEGORIES[0].name);
+  const [businessName, setBusinessName] = useState(initialPage?.businessName || '');
+  const [category, setCategory] = useState(initialPage?.category || CATEGORIES[0].name);
   const currentCategoryObj = CATEGORIES.find(c => c.name === category) || CATEGORIES[0];
   const [subcategory, setSubcategory] = useState(
-    currentCategoryObj.subcategories[0]?.name || ''
+    initialPage?.subcategory || currentCategoryObj.subcategories[0]?.name || ''
   );
-  const [languageMode, setLanguageMode] = useState<'en' | 'hi' | 'hinglish' | 'mixed'>('en');
-  const [city, setCity] = useState('');
-  const [nearbyAreas, setNearbyAreas] = useState('');
-  const [gmbReviewUrl, setGmbReviewUrl] = useState('');
+  const [languageMode, setLanguageMode] = useState<'en' | 'hi' | 'hinglish' | 'mixed'>(
+    initialPage?.language || (initialPage?.languages?.[0] as any) || 'en'
+  );
+  const [city, setCity] = useState(initialPage?.city || '');
+  const [nearbyAreas, setNearbyAreas] = useState(initialPage?.nearbyAreas?.join(', ') || '');
+  const [gmbReviewUrl, setGmbReviewUrl] = useState(initialPage?.gmbReviewUrl || '');
+  const [regenerateReviews, setRegenerateReviews] = useState<boolean>(!initialPage);
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -62,32 +67,56 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
         .map(a => a.trim())
         .filter(Boolean);
 
-      // Generate initial diverse multi-language pool of keyword-rich local SEO reviews
-      const { flatReviews, reviewsByLang } = generateInitialReviewPool(
-        businessName.trim(),
-        category,
-        subcategory || undefined,
-        city.trim() || undefined,
-        cleanNearby.length > 0 ? cleanNearby : undefined,
-        25,
-        languageMode
-      );
+      let finalReviews = initialPage?.reviews || [];
+      let finalReviewsByLang = initialPage?.reviewsByLang;
 
-      await onSave({
-        businessName: businessName.trim(),
-        category,
-        subcategory: subcategory || undefined,
-        language: languageMode,
-        languages: languageMode === 'mixed' ? ['en', 'hi', 'hinglish'] : [languageMode],
-        city: city.trim() || undefined,
-        nearbyAreas: cleanNearby.length > 0 ? cleanNearby : undefined,
-        slug: slugify(businessName),
-        gmbReviewUrl: normalizedUrl,
-        ratingScore: 5.0,
-        totalReviewsCount: 150,
-        reviews: flatReviews,
-        reviewsByLang
-      });
+      if (!initialPage || regenerateReviews || finalReviews.length === 0) {
+        // Generate initial diverse multi-language pool of keyword-rich local SEO reviews
+        const pool = generateInitialReviewPool(
+          businessName.trim(),
+          category,
+          subcategory || undefined,
+          city.trim() || undefined,
+          cleanNearby.length > 0 ? cleanNearby : undefined,
+          25,
+          languageMode
+        );
+        finalReviews = pool.flatReviews;
+        finalReviewsByLang = pool.reviewsByLang;
+      }
+
+      if (initialPage) {
+        await onSave({
+          ...initialPage,
+          businessName: businessName.trim(),
+          category,
+          subcategory: subcategory || undefined,
+          language: languageMode,
+          languages: languageMode === 'mixed' ? ['en', 'hi', 'hinglish'] : [languageMode],
+          city: city.trim() || undefined,
+          nearbyAreas: cleanNearby.length > 0 ? cleanNearby : undefined,
+          slug: slugify(businessName),
+          gmbReviewUrl: normalizedUrl,
+          reviews: finalReviews,
+          reviewsByLang: finalReviewsByLang
+        });
+      } else {
+        await onSave({
+          businessName: businessName.trim(),
+          category,
+          subcategory: subcategory || undefined,
+          language: languageMode,
+          languages: languageMode === 'mixed' ? ['en', 'hi', 'hinglish'] : [languageMode],
+          city: city.trim() || undefined,
+          nearbyAreas: cleanNearby.length > 0 ? cleanNearby : undefined,
+          slug: slugify(businessName),
+          gmbReviewUrl: normalizedUrl,
+          ratingScore: 5.0,
+          totalReviewsCount: 150,
+          reviews: finalReviews,
+          reviewsByLang: finalReviewsByLang
+        });
+      }
     } catch (err: any) {
       setErrorMsg(err?.message || 'Failed to extract Place ID. Please try again.');
       setIsGenerating(false);
@@ -98,7 +127,7 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
       <div className="w-full max-w-sm bg-[#FFFFFF] rounded-3xl p-5 sm:p-6 text-[#000000] my-auto max-h-[92vh] overflow-y-auto">
         <h2 className="text-lg sm:text-xl font-bold tracking-tight mb-4">
-          Create Landing Page
+          {initialPage ? 'Edit Landing Page' : 'Create Landing Page'}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-3.5">
@@ -237,6 +266,21 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
             />
           </div>
 
+          {initialPage && (
+            <div className="flex items-center gap-2 pt-1 pb-0.5">
+              <input
+                type="checkbox"
+                id="regenReviews"
+                checked={regenerateReviews}
+                onChange={e => setRegenerateReviews(e.target.checked)}
+                className="w-4 h-4 rounded text-black focus:ring-0 cursor-pointer accent-black"
+              />
+              <label htmlFor="regenReviews" className="text-xs font-medium text-[#3A3A3C] cursor-pointer">
+                Regenerate fresh reviews with new details
+              </label>
+            </div>
+          )}
+
           {errorMsg && (
             <p className="text-xs text-red-600 font-medium text-center">
               {errorMsg}
@@ -257,7 +301,9 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
               disabled={isGenerating}
               className="flex-1 min-h-[46px] rounded-full bg-[#000000] text-xs font-bold text-[#FFFFFF] active:scale-95 disabled:opacity-50 flex items-center justify-center"
             >
-              {isGenerating ? 'Generating...' : 'Generate'}
+              {isGenerating
+                ? initialPage ? 'Saving...' : 'Generating...'
+                : initialPage ? 'Save Changes' : 'Generate'}
             </button>
           </div>
         </form>

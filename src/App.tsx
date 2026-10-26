@@ -3,6 +3,7 @@ import { LandingPage } from './types';
 import {
   fetchWorkspaces,
   createWorkspace,
+  updateWorkspace,
   deleteWorkspace,
   isSessionAuthenticated
 } from './utils/api';
@@ -84,6 +85,13 @@ export default function App() {
     }
   };
 
+  const handleUpdatePage = async (page: LandingPage) => {
+    const updated = await updateWorkspace(page);
+    if (updated) {
+      await loadData();
+    }
+  };
+
   const handleDeletePage = async (id: string) => {
     const ok = await deleteWorkspace(id);
     if (ok) {
@@ -104,6 +112,7 @@ export default function App() {
         pages={pages}
         onLock={handleAdminLock}
         onCreatePage={handleCreatePage}
+        onUpdatePage={handleUpdatePage}
         onDeletePage={handleDeletePage}
         onNavigateToPage={(slug) => navigateTo(`/${slug}`)}
       />

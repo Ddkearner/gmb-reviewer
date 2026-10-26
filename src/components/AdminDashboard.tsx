@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LandingPage } from '../types';
-import { Plus, QrCode, Trash2, ExternalLink, Lock } from 'lucide-react';
+import { Plus, QrCode, Trash2, ExternalLink, Lock, Pencil } from 'lucide-react';
 import { QRCodeModal } from './QRCodeModal';
 import { CreatePageModal } from './CreatePageModal';
 
@@ -8,6 +8,7 @@ interface AdminDashboardProps {
   pages: LandingPage[];
   onLock?: () => void;
   onCreatePage: (pageData: Omit<LandingPage, 'id' | 'createdAt'>) => Promise<void>;
+  onUpdatePage?: (page: LandingPage) => Promise<void>;
   onDeletePage: (id: string) => Promise<void>;
   onNavigateToPage: (slug: string) => void;
 }
@@ -18,12 +19,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   pages,
   onLock,
   onCreatePage,
+  onUpdatePage,
   onDeletePage,
   onNavigateToPage
 }) => {
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
   const [activeQrModalPage, setActiveQrModalPage] = useState<LandingPage | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editingPage, setEditingPage] = useState<LandingPage | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleCopy = (page: LandingPage) => {
@@ -136,6 +139,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                   <button
                     type="button"
+                    onClick={() => setEditingPage(page)}
+                    className="w-9 h-9 rounded-full bg-[#F2F2F7] text-[#000000] flex items-center justify-center active:bg-[#E5E5EA] active:scale-95"
+                    title="Edit Page"
+                    aria-label="Edit Page"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => onNavigateToPage(page.slug)}
                     className="w-9 h-9 rounded-full bg-[#F2F2F7] text-[#000000] flex items-center justify-center active:bg-[#E5E5EA] active:scale-95"
                     title="Open"
@@ -166,8 +179,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <CreatePageModal
           onClose={() => setIsCreateOpen(false)}
           onSave={async (data) => {
-            await onCreatePage(data);
+            await onCreatePage(data as Omit<LandingPage, 'id' | 'createdAt'>);
             setIsCreateOpen(false);
+          }}
+        />
+      )}
+
+      {editingPage && (
+        <CreatePageModal
+          initialPage={editingPage}
+          onClose={() => setEditingPage(null)}
+          onSave={async (data) => {
+            if (onUpdatePage) {
+              await onUpdatePage(data as LandingPage);
+            }
+            setEditingPage(null);
           }}
         />
       )}

@@ -73,6 +73,25 @@ export function createLandingPage(pageData: Omit<LandingPage, 'id' | 'createdAt'
   return newPage;
 }
 
+export function updateLandingPage(page: LandingPage): LandingPage {
+  const pages = getStoredLandingPages();
+  const index = pages.findIndex(p => p.id === page.id || p.slug.toLowerCase() === page.slug.toLowerCase());
+
+  if (index >= 0) {
+    const updated = [...pages];
+    updated[index] = {
+      ...updated[index],
+      ...page
+    };
+    saveLandingPages(updated);
+    return updated[index];
+  } else {
+    const updated = [page, ...pages];
+    saveLandingPages(updated);
+    return page;
+  }
+}
+
 export function deleteLandingPage(id: string): void {
   const pages = getStoredLandingPages();
   const updated = pages.filter(p => p.id !== id);
