@@ -23,6 +23,7 @@ export interface LandingPage {
   businessName: string;
   category: string;
   subcategory?: string;
+  language?: 'en' | 'hi' | 'hinglish' | 'mixed';
   languages?: ('en' | 'hi' | 'hinglish')[];
   city?: string;
   nearbyAreas?: string[];
@@ -38,3 +39,4 @@ export interface LandingPage {
   };
   createdAt: string;
 }
+

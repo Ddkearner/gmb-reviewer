@@ -99,11 +99,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <span className="text-[11px] font-medium text-[#48484A] truncate max-w-[150px] sm:max-w-[200px]">
                       {page.subcategory || page.category}
                     </span>
-                    {Array.isArray(page.languages) && page.languages.length > 0 && (
+                    {(page.language || (Array.isArray(page.languages) && page.languages.length > 0)) && (
                       <>
                         <span className="text-[10px] text-[#C7C7CC]">•</span>
-                        <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded-full bg-[#F2F2F7] text-[#636366]">
-                          {page.languages.join('/')}
+                        <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#F2F2F7] text-[#636366]">
+                          {page.language || page.languages?.join('/')}
                         </span>
                       </>
                     )}

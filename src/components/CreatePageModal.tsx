@@ -20,11 +20,7 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
   const [subcategory, setSubcategory] = useState(
     currentCategoryObj.subcategories[0]?.name || ''
   );
-  const [languages, setLanguages] = useState<('en' | 'hi' | 'hinglish')[]>([
-    'en',
-    'hi',
-    'hinglish'
-  ]);
+  const [languageMode, setLanguageMode] = useState<'en' | 'hi' | 'hinglish' | 'mixed'>('en');
   const [city, setCity] = useState('');
   const [nearbyAreas, setNearbyAreas] = useState('');
   const [gmbReviewUrl, setGmbReviewUrl] = useState('');
@@ -39,17 +35,6 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
     } else {
       setSubcategory('');
     }
-  };
-
-  const toggleLanguage = (lang: 'en' | 'hi' | 'hinglish') => {
-    setLanguages(prev => {
-      if (prev.includes(lang)) {
-        if (prev.length === 1) return prev; // At least one language must remain
-        return prev.filter(l => l !== lang);
-      } else {
-        return [...prev, lang];
-      }
-    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,15 +69,16 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
         subcategory || undefined,
         city.trim() || undefined,
         cleanNearby.length > 0 ? cleanNearby : undefined,
-        30,
-        languages
+        25,
+        languageMode
       );
 
       await onSave({
         businessName: businessName.trim(),
         category,
         subcategory: subcategory || undefined,
-        languages,
+        language: languageMode,
+        languages: languageMode === 'mixed' ? ['en', 'hi', 'hinglish'] : [languageMode],
         city: city.trim() || undefined,
         nearbyAreas: cleanNearby.length > 0 ? cleanNearby : undefined,
         slug: slugify(businessName),
@@ -174,28 +160,24 @@ export const CreatePageModal: React.FC<CreatePageModalProps> = ({
           )}
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-semibold text-[#8E8E93]">
-                Review Languages (Multi-select)
-              </label>
-              <span className="text-[10px] text-[#8E8E93] font-medium">
-                {languages.length} selected
-              </span>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
+            <label className="block text-xs font-semibold text-[#8E8E93] mb-1.5">
+              Review Language
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
                 { id: 'en' as const, label: 'English', flag: '🇬🇧' },
                 { id: 'hi' as const, label: 'हिन्दी', flag: '🇮🇳' },
-                { id: 'hinglish' as const, label: 'Hinglish', flag: '💬' }
+                { id: 'hinglish' as const, label: 'Hinglish', flag: '💬' },
+                { id: 'mixed' as const, label: 'Mixed', flag: '🌐' }
               ].map(item => {
-                const isSelected = languages.includes(item.id);
+                const isSelected = languageMode === item.id;
                 return (
                   <button
                     type="button"
                     key={item.id}
-                    onClick={() => toggleLanguage(item.id)}
+                    onClick={() => setLanguageMode(item.id)}
                     disabled={isGenerating}
-                    className={`py-2 px-2 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 active:scale-95 disabled:opacity-60 ${
+                    className={`py-2.5 px-2 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 active:scale-95 disabled:opacity-60 ${
                       isSelected
                         ? 'bg-[#000000] text-[#FFFFFF] border-[#000000] shadow-sm'
                         : 'bg-[#F2F2F7] text-[#8E8E93] border-transparent hover:text-[#000000]'

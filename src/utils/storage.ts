@@ -104,8 +104,10 @@ export function buildShareableLandingPageUrl(page: LandingPage): string {
   params.set('c', page.category);
   params.set('u', page.gmbReviewUrl);
   if (page.subcategory) params.set('sc', page.subcategory);
-  if (Array.isArray(page.languages) && page.languages.length > 0) {
-    params.set('lng', page.languages.join(','));
+  if (page.language) {
+    params.set('lng', page.language);
+  } else if (Array.isArray(page.languages) && page.languages.length > 0) {
+    params.set('lng', page.languages[0]);
   }
   if (page.city) params.set('ct', page.city);
   if (Array.isArray(page.nearbyAreas) && page.nearbyAreas.length > 0) {
@@ -126,10 +128,9 @@ export function resolveIncomingUrlPayload(): LandingPage | null {
     const u = searchParams.get('u');
     const c = searchParams.get('c') || 'Local Business';
     const sc = searchParams.get('sc') || undefined;
-    const lngRaw = searchParams.get('lng');
-    const parsedLangs: ('en' | 'hi' | 'hinglish')[] = lngRaw
-      ? (lngRaw.split(',').filter(l => ['en', 'hi', 'hinglish'].includes(l)) as ('en' | 'hi' | 'hinglish')[])
-      : ['en', 'hi', 'hinglish'];
+    const lngRaw = searchParams.get('lng') || 'en';
+    const langMode: 'en' | 'hi' | 'hinglish' | 'mixed' =
+      lngRaw === 'hi' || lngRaw === 'hinglish' || lngRaw === 'mixed' ? lngRaw : 'en';
     const ct = searchParams.get('ct') || '';
     const na = searchParams.get('na')
       ? searchParams.get('na')!.split(',').map(s => s.trim()).filter(Boolean)
@@ -143,8 +144,8 @@ export function resolveIncomingUrlPayload(): LandingPage | null {
         sc,
         ct || undefined,
         na.length > 0 ? na : undefined,
-        30,
-        parsedLangs
+        25,
+        langMode
       );
 
       const page: LandingPage = {
@@ -153,7 +154,8 @@ export function resolveIncomingUrlPayload(): LandingPage | null {
         businessName: b,
         category: c,
         subcategory: sc,
-        languages: parsedLangs,
+        language: langMode,
+        languages: langMode === 'mixed' ? ['en', 'hi', 'hinglish'] : [langMode],
         city: ct || undefined,
         nearbyAreas: na.length > 0 ? na : undefined,
         gmbReviewUrl: u,

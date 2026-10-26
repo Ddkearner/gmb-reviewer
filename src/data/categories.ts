@@ -6,19 +6,17 @@ export const CATEGORIES: CategoryTemplate[] = [
     name: 'Marble, Granite & Tiles Shop',
     icon: 'Boxes',
     subcategories: [
-      { id: 'all', name: 'All / General Marble & Tiles' },
-      { id: 'italian', name: 'Italian & Imported Marble' },
-      { id: 'indian_marble', name: 'Indian Marble (Makrana, Rajnagar, Katni)' },
-      { id: 'granite', name: 'Granite Slabs & Kitchen Countertops' },
-      { id: 'tiles', name: 'Vitrified Floor & Wall Tiles' },
-      { id: 'quartz', name: 'Quartz, Nano White & Composite Stone' },
-      { id: 'sanitary', name: 'Sanitaryware & Bath Fittings' }
+      { id: 'all', name: 'All / General Marble & Tiles Shop' },
+      { id: 'marble_granite', name: 'Marble & Granite Shop' },
+      { id: 'tiles_showroom', name: 'Tiles Showroom' },
+      { id: 'flooring_supplier', name: 'Flooring & Stone Supplier' },
+      { id: 'sanitary_bath', name: 'Sanitaryware & Bath Store' }
     ],
     defaultReviews: [
-      'Huge collection of Italian marble and granite! High quality slabs, transparent pricing, and timely delivery at our site.',
-      'Best marble and tiles showroom in the area. Got wholesale rates for our house construction. Highly recommended!',
-      'Premum Makrana white marble and kitchen granite slabs. Very honest guidance by the owner and zero breakage in delivery.',
-      'Top tier tile designs and scratch-resistant kitchen slabs. Best showroom for modern home interiors.'
+      'Very impressive collection of marble, granite, and tiles! The quality is top notch and rates are very reasonable. The staff guided us patiently without pushing expensive options.',
+      'One of the best tile and marble showrooms in town. Honest guidance, fair square feet rates, and on-time delivery at our site with zero damage.',
+      'Great shopping experience for our home flooring. Clean showroom, transparent billing, and very polite owner. Highly recommended!',
+      'Huge variety of floor and wall tiles. Got the best wholesale price and prompt service. Very dependable shop.'
     ]
   },
   {
@@ -27,23 +25,19 @@ export const CATEGORIES: CategoryTemplate[] = [
     icon: 'Stethoscope',
     subcategories: [
       { id: 'all', name: 'All / General Healthcare' },
-      { id: 'dental', name: 'Dental Clinic & Orthodontics' },
-      { id: 'dermatology', name: 'Dermatology & Skin / Hair Care' },
-      { id: 'eye', name: 'Eye Clinic / Ophthalmology' },
-      { id: 'orthopedic', name: 'Orthopedic & Joint Specialist' },
-      { id: 'pediatric', name: 'Pediatrician & Child Care' },
-      { id: 'general_physician', name: 'General Physician & Medicine' },
-      { id: 'gynecology', name: 'Gynecology & Maternity Care' },
-      { id: 'ent', name: 'ENT Specialist (Ear, Nose, Throat)' },
-      { id: 'physiotherapy', name: 'Physiotherapy & Pain Relief' },
-      { id: 'ayurveda', name: 'Ayurveda & Panchakarma' },
-      { id: 'homeopathy', name: 'Homeopathy Clinic' }
+      { id: 'general_physician', name: 'General Physician / Clinic' },
+      { id: 'dental', name: 'Dental Clinic' },
+      { id: 'dermatology', name: 'Skin & Dermatology Clinic' },
+      { id: 'eye', name: 'Eye Clinic' },
+      { id: 'pediatric', name: 'Child & Pediatric Clinic' },
+      { id: 'orthopedic', name: 'Orthopedic / Bone & Joint Clinic' },
+      { id: 'physiotherapy', name: 'Physiotherapy Centre' }
     ],
     defaultReviews: [
-      'Extremely knowledgeable doctor and compassionate medical staff. Everything was explained clearly and the treatment was very effective.',
-      'Very clean and modern clinic. Minimal waiting time, gentle care, and thorough diagnosis. Best medical consultation experience.',
-      'Great experience! The doctor listened patiently and prescribed the right medication. Staff is polite and supportive.',
-      'Highly professional healthcare center. Transparent guidance, hygienic premises, and attentive doctors.'
+      'Extremely polite and knowledgeable doctor. Listened to all concerns patiently and provided accurate medical advice. The clinic is very clean and staff is cooperative.',
+      'Very well-managed clinic with minimal waiting time. Doctor explains everything clearly without prescribing unnecessary tests or medicines. Great experience.',
+      'Clean premises, hygienic examination area, and attentive medical staff. Truly a dependable and patient-friendly healthcare center.',
+      'Warm behavior by the doctor and nursing team. Consultations are thorough and fees are very reasonable. Highly satisfied!'
     ]
   },
   {
@@ -52,19 +46,17 @@ export const CATEGORIES: CategoryTemplate[] = [
     icon: 'GraduationCap',
     subcategories: [
       { id: 'all', name: 'All / General Education' },
-      { id: 'iit_neet', name: 'IIT-JEE & NEET Competitive Coaching' },
-      { id: 'school_tuition', name: 'School Tuitions (Class 6th-12th Foundation)' },
-      { id: 'computer_coding', name: 'Computer Institute & Coding / IT Training' },
-      { id: 'competitive_exams', name: 'Govt Exams (UPSC, SSC, Banking, Railways)' },
-      { id: 'spoken_english', name: 'Spoken English, IELTS & Communication' },
-      { id: 'commerce_ca', name: 'Commerce, Accounts & CA / CS Foundation' },
-      { id: 'music_art', name: 'Music, Dance & Fine Arts Academy' }
+      { id: 'coaching_centre', name: 'Coaching Centre (Academics)' },
+      { id: 'computer_institute', name: 'Computer & IT Institute' },
+      { id: 'competitive_exams', name: 'Competitive Exams Centre' },
+      { id: 'tuitions', name: 'Tuition Classes' },
+      { id: 'spoken_english', name: 'Spoken English & Communication' }
     ],
     defaultReviews: [
-      'Exceptional faculty and structured study material. Concept clarity and regular doubt sessions made a massive difference in my scores!',
-      'Best coaching institute with dedicated teachers who give individual attention to every student. Great test series and mentorship.',
-      'Highly recommended institute! Supportive faculty, interactive classroom lectures, and disciplined academic environment.',
-      'Top-notch teaching methodology! The teachers are patient, concepts are crystal clear, and results speak for themselves.'
+      'Excellent teachers who focus on strong fundamentals and concept clarity. The study atmosphere is disciplined and motivating for students.',
+      'Best coaching institute with very supportive faculty. Regular practice, timely doubt solving, and personal attention to every learner.',
+      'Great learning environment! The teachers explain every topic with patience and passion. Very happy with the academic progress here.',
+      'Top quality education at affordable fees. Highly structured classes and dedicated instructors. Highly recommended!'
     ]
   },
   {
@@ -73,18 +65,15 @@ export const CATEGORIES: CategoryTemplate[] = [
     icon: 'Dumbbell',
     subcategories: [
       { id: 'all', name: 'All / General Fitness' },
-      { id: 'strength', name: 'Strength & Bodybuilding Gym' },
-      { id: 'crossfit', name: 'CrossFit & Functional Training' },
-      { id: 'cardio_fatloss', name: 'Cardio, HIIT & Fat Loss Studio' },
-      { id: 'yoga_pilates', name: 'Yoga, Meditation & Pilates' },
-      { id: 'personal_training', name: 'Personal Training & 1-on-1 Transformation' },
-      { id: 'zumba_dance', name: 'Zumba & Aerobics Dance Fitness' }
+      { id: 'fitness_gym', name: 'Fitness Gym' },
+      { id: 'unisex_gym', name: 'Unisex Gym' },
+      { id: 'strength_club', name: 'CrossFit & Strength Club' },
+      { id: 'yoga_studio', name: 'Yoga & Fitness Studio' }
     ],
     defaultReviews: [
-      'Top tier gym equipment and cleanest workout environment in the area. Trainers are truly supportive and always motivate you to hit your goals!',
-      'Best gym experience ever! High quality machines, spacious workout floors, and polite staff. Highly recommend joining.',
-      'Outstanding gym! Great atmosphere, hygienic locker rooms, and certified trainers who guide you properly through every workout.',
-      'Superb fitness center! Friendly community, advanced cardio and strength equipment, and great personal training sessions.'
+      'Clean workout space and well-maintained equipment. The trainers are always around to help with proper form and guide beginners.',
+      'Great workout atmosphere with positive energy. Spacious floor, hygienic locker rooms, and polite staff. Best gym in the area!',
+      'Excellent fitness center! Plenty of equipment, good ventilation, and supportive gym community. Very satisfied with my membership.'
     ]
   },
   {
@@ -92,19 +81,16 @@ export const CATEGORIES: CategoryTemplate[] = [
     name: 'Salon & Spa',
     icon: 'Sparkles',
     subcategories: [
-      { id: 'all', name: 'All / General Salon & Spa' },
-      { id: 'mens_grooming', name: "Men's Salon & Grooming Lounge" },
-      { id: 'womens_hair', name: "Women's Hair Styling, Color & Botox" },
-      { id: 'bridal_makeup', name: 'Bridal Makeup & Pre-Wedding Studio' },
-      { id: 'skin_facial', name: 'Facial, Cleanup & Skin Glow Studio' },
-      { id: 'day_spa', name: 'Luxury Body Massage & Day Spa' },
-      { id: 'nail_art', name: 'Nail Art, Extensions & Lash Studio' }
+      { id: 'all', name: 'All / General Salon' },
+      { id: 'unisex_salon', name: 'Unisex Salon' },
+      { id: 'mens_salon', name: "Men's Salon & Grooming" },
+      { id: 'womens_parlour', name: "Women's Beauty Parlour" },
+      { id: 'spa_wellness', name: 'Spa & Wellness Centre' }
     ],
     defaultReviews: [
-      'Incredible service and warm hospitality! Got exactly the style I requested. The staff is polite, skilled, and gentle.',
-      'Premium pampering experience! Very hygienic salon, talented stylists, and relaxing ambiance. Will definitely come back.',
-      'Loved the haircut and treatment! The stylist took time to understand my hair and did a phenomenal job.',
-      'Top-rated salon with attentive professionals and clean equipment. 10/10 service and great value!'
+      'Very clean and hygienic salon! The staff is polite, patient, and highly skilled. They listened carefully to what I wanted and did a wonderful job.',
+      'Relaxing environment, modern setup, and courteous professionals. Pricing is fair and service quality is exceptional.',
+      'Best salon experience in town. Clean tools, warm hospitality, and thorough attention to detail. Will definitely visit again!'
     ]
   },
   {
@@ -113,18 +99,15 @@ export const CATEGORIES: CategoryTemplate[] = [
     icon: 'Utensils',
     subcategories: [
       { id: 'all', name: 'All / General Dining' },
-      { id: 'coffee_cafe', name: 'Artisan Coffee Shop & Cozy Cafe' },
-      { id: 'family_restaurant', name: 'Family Restaurant & Multi-Cuisine' },
-      { id: 'pure_veg', name: 'Pure Veg & Traditional Thali' },
-      { id: 'fast_food', name: 'Fast Food, Burgers & Pizza Parlour' },
-      { id: 'bakery', name: 'Bakery, Cakes & Desserts' },
-      { id: 'rooftop', name: 'Rooftop Lounge & Fine Dining' }
+      { id: 'family_restaurant', name: 'Family Restaurant' },
+      { id: 'cafe_coffee', name: 'Cafe & Coffee Spot' },
+      { id: 'fast_food', name: 'Fast Food & Snacks' },
+      { id: 'pure_veg', name: 'Pure Veg Restaurant' }
     ],
     defaultReviews: [
-      'Delicious food, cozy aesthetic, and quick service! Everything was fresh and flavors were on point. Must visit spot.',
-      'Amazing coffee and delectable food! Wonderful cozy vibe, polite servers, and great music. Loved every bit of it.',
-      'One of the best dining spots in town! Great presentation, generous portions, and warm hospitable staff.',
-      'Fantastic experience! Mouth-watering delicacies, clean seating area, and fast turnaround time.'
+      'Delicious food, clean seating, and fast service! Everything tasted fresh and the staff was very courteous throughout our visit.',
+      'Wonderful dining spot for friends and family. Pleasant ambience, reasonable prices, and mouth-watering dishes. Must visit!',
+      'Very neat and hygienic restaurant. Prompt service, tasty food, and comfortable seating. Thoroughly enjoyed the experience.'
     ]
   },
   {
@@ -132,17 +115,15 @@ export const CATEGORIES: CategoryTemplate[] = [
     name: 'Automotive & Garage',
     icon: 'Wrench',
     subcategories: [
-      { id: 'all', name: 'All / General Automotive' },
-      { id: 'car_service', name: 'Car Multi-Brand Periodic Service & Repair' },
-      { id: 'detailing_wash', name: 'Car Detailing, Ceramic Coating & PPF' },
-      { id: 'tyre_alignment', name: 'Wheel Alignment, Balancing & Tyre Shop' },
-      { id: 'denting_painting', name: 'Denting, Painting & Accidental Repair' },
-      { id: 'two_wheeler', name: 'Bike & Two-Wheeler Workshop' }
+      { id: 'all', name: 'All / General Auto Service' },
+      { id: 'car_service', name: 'Car Service Workshop' },
+      { id: 'bike_repair', name: 'Bike Repair Workshop' },
+      { id: 'car_wash', name: 'Car Wash & Cleaning' }
     ],
     defaultReviews: [
-      'Honest mechanics and transparent pricing! Car was serviced on time and runs like brand new.',
-      'Excellent car detailing and ceramic wash. Mirror finish shine with zero scratches. Highly satisfied!',
-      'Prompt diagnostics, genuine spare parts, and zero hidden charges. Best garage in town.'
+      'Honest mechanics and very transparent dealing. Serviced my vehicle on time with genuine guidance and zero unnecessary charges.',
+      'Reliable workshop with skilled technicians. Thorough diagnostics, fair labor rates, and quick turnaround. Best garage in the area.',
+      'Superb service quality and respectful staff. Vehicle was delivered clean and runs smoothly. Highly recommended!'
     ]
   },
   {
@@ -151,16 +132,12 @@ export const CATEGORIES: CategoryTemplate[] = [
     icon: 'Home',
     subcategories: [
       { id: 'all', name: 'All / General Real Estate' },
-      { id: 'flats_apartments', name: 'Residential Flats, Apartments & Floors' },
-      { id: 'commercial', name: 'Commercial Shops, Showrooms & Offices' },
-      { id: 'plots_land', name: 'Residential & Commercial Plots / Land' },
-      { id: 'rental_pg', name: 'House Rental, Flatmates & PG' },
-      { id: 'villas', name: 'Luxury Villas & Farmhouses' }
+      { id: 'property_dealer', name: 'Property Dealer & Broker' },
+      { id: 'real_estate_advisor', name: 'Real Estate Consultant' }
     ],
     defaultReviews: [
-      'Completely transparent and trustworthy property advisory! Found our dream home with zero paperwork hassle.',
-      'Best real estate consultants in the city. Honest advice, prime locations, and seamless deal negotiation.',
-      'Very professional team with deep market knowledge. Highly recommend for any property investment.'
+      'Completely transparent and trustworthy property advisory! Helped us find the right property without any false commitments or hidden hassles.',
+      'Honest guidance, great understanding of local market rates, and smooth documentation support. Highly recommended for property matters.'
     ]
   },
   {
@@ -169,16 +146,12 @@ export const CATEGORIES: CategoryTemplate[] = [
     icon: 'ShoppingBag',
     subcategories: [
       { id: 'all', name: 'All / General Retail' },
-      { id: 'clothing_fashion', name: 'Clothing, Ethnic Wear & Fashion Boutique' },
-      { id: 'electronics_mobile', name: 'Electronics, Appliances & Mobile Shop' },
-      { id: 'grocery', name: 'Supermarket, Grocery & Daily Needs' },
-      { id: 'furniture_decor', name: 'Furniture & Home Decor Store' },
-      { id: 'jewelry', name: 'Jewelry & Gold Ornaments' }
+      { id: 'retail_store', name: 'Retail Showroom' },
+      { id: 'wholesale_dealer', name: 'Wholesale Dealer' }
     ],
     defaultReviews: [
-      'Extensive collection of genuine products! Courteous staff and very reasonable pricing. Delightful shopping experience.',
-      'Top quality items and wonderful customer service. Smooth billing and great discounts.',
-      'Best retail store in the area. Wide variety of choices and very polite store owners.'
+      'Wide variety of quality products at very reasonable rates. The shopkeeper and staff are courteous and honest in their dealing.',
+      'Great shopping experience with prompt service and fair pricing. Highly recommended local store!'
     ]
   },
   {
@@ -186,12 +159,11 @@ export const CATEGORIES: CategoryTemplate[] = [
     name: 'Other Local Business',
     icon: 'Building2',
     subcategories: [
-      { id: 'all', name: 'General Business & Professional Services' }
+      { id: 'all', name: 'General Business & Services' }
     ],
     defaultReviews: [
       'Outstanding customer service and exceptional workmanship! Highly professional and trustworthy team.',
-      'Very satisfied with their prompt and high quality service. Transparent rates and great communication.',
-      'Top rated local business with reliable and polite staff. 10/10 experience!'
+      'Very satisfied with their prompt and high quality service. Transparent rates and great communication.'
     ]
   }
 ];
@@ -202,30 +174,17 @@ export const INITIAL_LANDING_PAGES: LandingPage[] = [
     slug: 'titan-fitness-club',
     businessName: 'Titan Fitness Club',
     category: 'Gym & Fitness',
-    subcategory: 'Strength & Bodybuilding Gym',
-    languages: ['en', 'hi', 'hinglish'],
-    tagline: 'Premium Strength & Functional Training',
+    subcategory: 'Fitness Gym',
+    languages: ['en'],
+    tagline: 'Premium Fitness & Strength Studio',
     gmbReviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4',
     ratingScore: 5.0,
     totalReviewsCount: 248,
     reviews: [
-      'Top tier gym equipment and cleanest workout environment in the area. Trainers are truly supportive and always motivate you to hit your goals!',
-      'Best gym experience ever! High quality machines, spacious workout floors, and polite staff. Highly recommend joining.',
-      'जिम का माहौल और ट्रेनर्स दोनों बहुत बढ़िया हैं। यहाँ वर्कआउट करने का अलग ही मज़ा है।',
-      'Clean environment, top equipment aur friendly trainers. Definitely 5 star gym hai!'
+      'Clean workout space and well-maintained equipment. The trainers are always around to help with proper form and guide beginners.',
+      'Great workout atmosphere with positive energy. Spacious floor, hygienic locker rooms, and polite staff. Best gym in the area!',
+      'Excellent fitness center! Plenty of equipment, good ventilation, and supportive gym community. Very satisfied with my membership.'
     ],
-    reviewsByLang: {
-      en: [
-        'Top tier gym equipment and cleanest workout environment in the area. Trainers are truly supportive and always motivate you to hit your goals!',
-        'Best gym experience ever! High quality machines, spacious workout floors, and polite staff. Highly recommend joining.'
-      ],
-      hi: [
-        'जिम का माहौल और ट्रेनर्स दोनों बहुत बढ़िया हैं। यहाँ वर्कआउट करने का अलग ही मज़ा है।'
-      ],
-      hinglish: [
-        'Clean environment, top equipment aur friendly trainers. Definitely 5 star gym hai!'
-      ]
-    },
     createdAt: '2026-03-01T10:00:00.000Z'
   },
   {
@@ -233,28 +192,17 @@ export const INITIAL_LANDING_PAGES: LandingPage[] = [
     slug: 'apex-marble-granite',
     businessName: 'Apex Marble & Granite',
     category: 'Marble, Granite & Tiles Shop',
-    subcategory: 'Italian & Imported Marble',
-    languages: ['en', 'hi', 'hinglish'],
-    tagline: 'Premium Italian Marble & Kitchen Granite',
+    subcategory: 'Marble & Granite Shop',
+    languages: ['en'],
+    tagline: 'Quality Marble, Granite & Tiles',
     gmbReviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4',
     ratingScore: 5.0,
     totalReviewsCount: 185,
     reviews: [
-      'Huge collection of Italian marble and granite! High quality slabs, transparent pricing, and timely delivery.',
-      'मार्बल और ग्रेनाइट का इतना बेहतरीन कलेक्शन पूरे शहर में कहीं नहीं देखा। रेट्स बहुत वाजिब हैं।',
-      'Marble aur tiles ka collection dekh ke maza aa gaya! Wholesale rate me premium quality mil gayi.'
+      'Very impressive collection of marble, granite, and tiles! The quality is top notch and rates are very reasonable. The staff guided us patiently without pushing expensive options.',
+      'One of the best tile and marble showrooms in town. Honest guidance, fair square feet rates, and on-time delivery at our site with zero damage.',
+      'Great shopping experience for our home flooring. Clean showroom, transparent billing, and very polite owner. Highly recommended!'
     ],
-    reviewsByLang: {
-      en: [
-        'Huge collection of Italian marble and granite! High quality slabs, transparent pricing, and timely delivery.'
-      ],
-      hi: [
-        'मार्बल और ग्रेनाइट का इतना बेहतरीन कलेक्शन पूरे शहर में कहीं नहीं देखा। रेट्स बहुत वाजिब हैं।'
-      ],
-      hinglish: [
-        'Marble aur tiles ka collection dekh ke maza aa gaya! Wholesale rate me premium quality mil gayi.'
-      ]
-    },
     createdAt: '2026-03-05T10:00:00.000Z'
   }
 ];

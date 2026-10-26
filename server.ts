@@ -236,6 +236,7 @@ app.post('/api/workspaces', async (req, res) => {
     businessName,
     category,
     subcategory,
+    language,
     languages,
     city,
     nearbyAreas,
@@ -269,7 +270,8 @@ app.post('/api/workspaces', async (req, res) => {
     businessName: businessName.trim(),
     category: category || 'Local Business',
     subcategory: subcategory || undefined,
-    languages: Array.isArray(languages) ? languages : ['en', 'hi', 'hinglish'],
+    language: language || (Array.isArray(languages) ? languages[0] : 'en'),
+    languages: Array.isArray(languages) ? languages : ['en'],
     city: city ? city.trim() : undefined,
     nearbyAreas: Array.isArray(nearbyAreas)
       ? nearbyAreas.map((a: string) => a.trim()).filter(Boolean)

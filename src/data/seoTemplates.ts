@@ -1,452 +1,438 @@
 /**
- * High-Intent SEO Keywords & 500+ Combinatorial Multi-Language Review Engine.
- * Engineered for Google My Business Local 3-Pack Ranking, Zero-Spam Detection,
- * with Full Support for English, Hindi (शुद्ध देवनागरी), and Hinglish (रोमन हिंदी).
+ * High-Intent Local SEO Keywords & Multi-Language Review Engine.
+ * Engineered for Google My Business Local 3-Pack Ranking, Zero Spam Detection.
+ * 
+ * Rules:
+ * 1. Non-specified and non-personal: No fake promises, no specific brand/procedure claims,
+ *    no personal doctor or owner names that might not exist in that business.
+ * 2. Hindi & Hinglish are NOT literal translations of English. They are authentic,
+ *    organic, colloquial reviews written from real everyday customer perspectives.
+ * 3. 500+ unique review combinations per language via combinatorial template engine.
  */
 
-// 1. High-Intent Keywords Dictionary (100+ per category & subcategory)
+// 1. High-Intent Keywords Dictionary (100+ for Marble, and robust generic lists for all categories)
 export const CATEGORY_KEYWORDS: Record<string, string[]> = {
   marble: [
-    // Italian & Imported
-    'imported italian marble', 'statuario marble slabs', 'calacatta white marble', 'botticino classic marble',
-    'grey william marble', 'michael angelo marble', 'travertine marble stone', 'flawless onyx marble',
-    'imported marble showroom', 'luxury italian marble flooring', 'bookmatch marble slabs',
-    // Indian Marble
-    'makrana white marble', 'makrana albeta marble', 'rajnagar white marble', 'katni marble slabs',
-    'dungri marble flooring', 'green marble slabs', 'toronto marble stone', 'super white marble',
-    'marble temple mandir design', 'custom marble cutting', 'pure white marble dealer', 'jaipur marble supplier',
-    'kishangarh direct marble', 'quarry direct marble dealer', 'polished marble slabs',
-    // Granite & Kitchen Countertops
-    'black galaxy granite', 'rajasthan black granite', 'tan brown granite slab', 'kashmir white granite',
-    'steel grey granite', 'telephone black granite', 'crystal yellow granite', 'alaska white granite',
-    'jhansi red granite', 'honed granite slabs', 'leather finish granite', 'flamed outdoor granite',
-    'kitchen countertop granite slab', 'stain resistant kitchen slab', 'mirror polish granite',
-    'granite steps and risers', 'durable granite flooring', 'granite cut to size',
-    // Tiles (Vitrified & Ceramic)
-    'vitrified floor tiles', 'large format glazed vitrified tiles', 'designer bathroom wall tiles',
-    'anti-skid floor tiles', 'full body vitrified tiles', 'wooden plank finish tiles',
-    'morbi vitrified tiles', 'subway kitchen tiles', 'elevation wall cladding tiles',
-    'heavy duty parking tiles', 'matte finish floor tiles', 'glossy wall tiles',
-    'terrazzo tiles', 'mosaic tiles', 'exterior stone tiles', 'seamless tile laying',
-    'digital ceramic tiles', 'porcelain slab countertop', 'rustic floor tiles',
-    // Quartz & Nano Stone
-    'engineered quartz slabs', 'nano white stone slab', 'composite marble slabs',
-    'scratch resistant quartz', 'heat resistant kitchen quartz', 'pure white nano stone',
-    'calacatta quartz countertop', 'durable kitchen island slab',
-    // Quality & Merchant Experience
-    'wholesale marble dealer', 'factory price tiles showroom', 'direct tile supplier',
-    'best marble shop in town', 'genuine stone merchant', 'safe tile delivery at site',
-    'zero breakage marble delivery', 'transparent marble square feet rates',
-    'architectural stone supplier', 'premium flooring collection', 'modern home elevation stone',
-    'honest marble thickness', 'epoxy grouted tiles', 'mirror polish diamond cutting',
-    'trusted granite merchant', 'high quality bath fittings', 'luxury sanitaryware collection',
-    'designer stone basin', 'waterproof wall tiles', 'interlocking paving blocks',
-    'kota stone slabs', 'dharangadhra natural stone', 'sandstone wall cladding'
+    'best marble shop', 'marble and granite dealer', 'top tiles showroom', 'quality floor tiles',
+    'wholesale marble dealer', 'trusted stone merchant', 'tiles and sanitary store', 'best flooring shop',
+    'wide variety of tiles', 'genuine marble dealer', 'fair price marble shop', 'best granite dealer in town',
+    'durable floor tiles', 'wall tiles showroom', 'premium tiles collection', 'reliable stone supplier',
+    'best tile designs', 'affordable marble rates', 'kitchen slab stone dealer', 'house flooring tiles',
+    'modern tiles collection', 'bathroom wall tiles', 'experienced stone dealer', 'top rated marble shop',
+    'building stone dealer', 'home interior tiles', 'good customer service', 'timely site delivery',
+    'transparent billing', 'honest pricing', 'best tiles store', 'marble godown',
+    'stone showroom near me', 'quality granite shop', 'latest tiles collection', 'flooring marble supplier',
+    'countertop stone dealer', 'vitrified tiles dealer', 'ceramic tiles shop', 'elevation tiles showroom',
+    'parking tiles dealer', 'exterior wall tiles', 'interior floor tiles', 'marble and granite supplier',
+    'trusted tiles merchant', 'top stone dealer', 'good collection of marble', 'reasonable rates',
+    'honest guidance', 'prompt material delivery', 'safe transport of tiles', 'satisfactory service',
+    'well maintained showroom', 'cooperative staff', 'polite owner', 'best building materials shop',
+    'reputed stone shop', 'huge variety in showroom', 'great tile quality', 'sturdy granite slabs',
+    'smooth floor finish', 'glossy wall tiles', 'matte finish tiles', 'anti skid bathroom tiles',
+    'designer tiles collection', 'value for money rates', 'top quality stone', 'leading marble shop',
+    'dependable tile supplier', 'home renovation tiles', 'construction stone supplier', 'direct wholesale prices',
+    'clear square feet calculation', 'authentic stone shop', 'best shop for flooring', 'standard quality tiles',
+    'long lasting stone', 'excellent display', 'helpful sales team', 'quick order processing',
+    'neat showroom display', 'complete flooring range', 'budget friendly tiles', 'luxury tiles collection',
+    'prime stone supplier', 'commercial flooring dealer', 'residential tiles store', 'top recommendation in the city',
+    'best tile dealer in the market', 'wide range of designs', 'reliable delivery', 'honest dealing',
+    'proper material packing', 'no hidden charges', 'smooth transaction', 'first class tiles',
+    'strong granite stone', 'satisfying purchase', 'superb customer support', '5 star stone merchant',
+    'most trusted marble dealer', 'large variety of flooring', 'premium home finishes', 'best stone supplier'
   ],
 
   clinic: [
-    // General Healthcare & Physician
-    'expert medical consultation', 'compassionate physician', 'thorough health diagnosis',
-    'gentle patient care', 'minimal waiting time', 'clean clinic premises',
-    'experienced medical doctor', 'accurate prescription', 'patient listening doctor',
-    'affordable consultation fee', 'reliable family doctor', 'supportive clinic staff',
-    'hygienic examination room', 'detailed illness explanation', 'effective medical treatment',
-    'prompt health recovery', 'friendly reception team', 'modern clinic setup',
-    'preventive health checkup', 'seasonal fever treatment', 'chronic illness care',
-    // Dental Specialists
-    'painless root canal treatment', 'dental implants specialist', 'gentle teeth cleaning',
-    'invisible teeth aligners', 'cosmetic smile makeover', 'wisdom tooth removal',
-    'painless tooth extraction', 'metal free dental crowns', 'pediatric dental care',
-    'teeth whitening treatment', 'sterile dental instruments', 'experienced dentist consultation',
-    // Dermatology & Skin
-    'expert dermatologist', 'advanced acne scar treatment', 'laser hair reduction',
-    'hair fall PRP treatment', 'glowing skin medi-facial', 'pigmentation removal',
-    'eczema skin treatment', 'hygienic skin clinic',
-    // Orthopedic & Eye & ENT
-    'orthopedic joint specialist', 'knee pain treatment', 'fracture bone care',
-    'comprehensive eye examination', 'cataract surgery consultation', 'lasik vision correction',
-    'ent ear pain relief', 'sinus treatment doctor', 'hearing checkup clinic',
-    // Physiotherapy & Alternative
-    'physiotherapy rehabilitation', 'back pain physiotherapist', 'sports injury recovery',
-    'ayurvedic consultation', 'panchakarma therapy center', 'homeopathy clinic treatment'
+    'experienced doctor', 'best clinic near me', 'hygienic clinic', 'proper diagnosis',
+    'polite medical staff', 'professional doctor consultation', 'clean examination room',
+    'patient friendly clinic', 'trusted healthcare center', 'affordable consultation',
+    'well managed clinic', 'caring staff', 'reliable clinic', 'minimal waiting time',
+    'good patient care', 'gentle checkup', 'accurate guidance', 'transparent consultation',
+    'supportive nursing team', 'clean clinic premises', 'routine health checkup',
+    'top rated clinic', 'patient listening doctor', 'respectful staff', 'punctual doctor',
+    'safe clinic environment', 'genuine medical advice', 'dependable doctor',
+    'systematic clinic management', 'calm and clean atmosphere', 'honest consultation fee',
+    'family healthcare clinic', 'attentive medical care', 'helpful reception desk'
   ],
 
   coaching: [
-    // IIT-JEE & NEET
-    'iit jee preparation', 'neet medical coaching', 'expert physics faculty',
-    'chemistry concept clarity', 'mathematics shortcut techniques', 'biology diagram notes',
-    'all india mock test series', 'top rankers mentorship', 'dedicated doubt clearing sessions',
-    'daily practice papers', 'previous years question analysis', 'error analysis sessions',
-    // School Tuitions (6th-12th)
-    'school foundation classes', 'cbse board exam coaching', 'icse curriculum mentorship',
-    'class 10 board preparation', 'class 12 board scoring guidance', 'individual student attention',
-    'disciplined classroom environment', 'regular parent teacher meetings', 'score improvement guarantee',
-    // Computer & Coding / IT
-    'full stack web development course', 'python programming classes', 'data science training',
-    'practical coding assignments', 'job placement assistance', 'certified computer course',
-    'tally and accounting training', 'basic to advanced computer skills',
-    // Govt & Competitive Exams
-    'upsc civil services guidance', 'ssc cgl preparation', 'bank po exam coaching',
-    'reasoning and aptitude tricks', 'current affairs weekly sessions', 'mock interview preparation',
-    // Spoken English & Skills
-    'fluent spoken english classes', 'ielts exam preparation band 8', 'personality development',
-    'public speaking confidence', 'business communication training'
+    'best coaching institute', 'experienced teachers', 'good study environment',
+    'concept clarity', 'supportive faculty', 'regular test practice', 'dedicated teachers',
+    'top coaching centre in the area', 'quality education', 'personal attention',
+    'student friendly atmosphere', 'disciplined classroom', 'affordable fee structure',
+    'proper study guidance', 'reliable coaching institute', 'interactive learning',
+    'skilled instructors', 'doubt clearing sessions', 'positive classroom culture',
+    'good mentoring', 'well structured classes', 'focus on fundamentals',
+    'thorough subject preparation', 'patient teaching staff', 'inspiring mentors',
+    'organized study plan', 'timely syllabus completion', 'motivating teachers'
   ],
 
   gym: [
-    // Strength & Bodybuilding
-    'personal training', 'strength training', 'weight loss program', 'muscle building',
-    'certified fitness coaches', 'body transformation', 'modern cardio machines',
-    'clean gym floor', 'supportive workout environment', 'spacious gym space',
-    'free weights section', 'crossfit workouts', 'functional training', 'hygienic locker rooms',
-    'diet guidance', 'proper workout form guidance', 'high end gym equipment',
-    'fitness community', 'energizing workout vibe', 'top tier fitness center',
-    'personalized workout routine', 'fat loss guidance', 'strength conditioning',
-    'friendly gym staff', 'professional trainers', 'steam bath and shower facility',
-    'heavy lifting zone', 'squat racks and benches', 'dumbbells and cable machines',
-    'morning workout sessions', 'evening workout slots', 'positive gym culture',
-    'posture correction', 'flexibility training', 'core strengthening',
-    'athlete training', 'motivating atmosphere', 'hygienic workout zone',
-    'ac workout floors', 'affordable gym membership', 'expert training guidance',
-    'body recomposition', 'calisthenics area', 'treadmills and ellipticals',
-    'rowing machines', 'deadlift platform', 'leg press machines', 'hiit training',
-    'yoga and pilates classes', 'zumba dance fitness', 'safe female workout environment'
+    'best gym near me', 'clean workout space', 'quality gym equipment', 'supportive gym trainers',
+    'good workout atmosphere', 'hygienic gym premises', 'motivating fitness center',
+    'spacious workout floor', 'friendly gym staff', 'well maintained gym', 'affordable gym membership',
+    'top fitness club in town', 'positive workout vibe', 'proper gym ventilation',
+    'helpful gym trainers', 'great fitness community', 'clean locker area', 'regular equipment maintenance'
   ],
 
   salon: [
-    'trendy haircut and styling', 'relaxing hair spa', 'radiant facial treatment',
-    'flawless bridal makeup', 'expert hair colorist', 'soothing head massage',
-    'clean and hygienic salon', 'polite and skilled stylists', 'premium salon ambiance',
-    'keratin hair treatment', 'hair botox treatment', 'gentle skin detan',
-    'pedicure and manicure', 'modern salon equipment', 'natural look makeup',
-    'beard styling and grooming', 'customized hair consultation', 'scalp care treatment',
-    'luxurious pampering session', 'sanitized beauty scissors and brushes', 'courteous salon hospitality',
-    'refreshing beauty treatments', 'professional beauty therapists', 'smooth hair blowout',
-    'long lasting hair styling', 'glow boosting skin treatment', 'hygienic waxing service',
-    'nail art and extensions', 'relaxing day spa massage', 'pocket friendly salon packages'
+    'best salon in the area', 'hygienic salon', 'experienced hair stylist', 'polite salon staff',
+    'clean premises', 'relaxing atmosphere', 'professional beauty service', 'top rated salon',
+    'affordable parlour', 'good customer care', 'trusted salon', 'clean equipment',
+    'patient styling', 'neat and clean setup', 'value for money salon', 'courteous salon team'
   ],
 
   cafe: [
-    'artisan brewed coffee', 'delectable culinary flavors', 'cozy aesthetic ambiance',
-    'quick and warm service', 'freshly prepared delicacies', 'mouthwatering burgers and pasta',
-    'instagrammable cafe interior', 'peaceful coffee date spot', 'courteous serving staff',
-    'inviting cozy seating', 'crisp and fresh snacks', 'refreshing mocktails and shakes',
-    'relaxing background playlist', 'hygienic kitchen and dining area', 'superb food presentation',
-    'rich aromatic cappuccino', 'warm hospitality', 'generous food portions',
-    'pocket friendly cafe menu', 'family and friends hangout spot', 'clean dining tables',
-    'pure veg multi-cuisine food', 'authentic woodfired pizza', 'delicious dessert cakes'
+    'delicious food', 'hygienic kitchen', 'best restaurant near me', 'pleasant ambience',
+    'fast service', 'fresh food quality', 'polite staff', 'family friendly atmosphere',
+    'affordable dining', 'clean seating', 'top food spot in town', 'tasty preparation',
+    'cozy seating', 'prompt service', 'clean dining area', 'great culinary experience'
   ],
 
   automotive: [
-    'honest vehicle diagnosis', 'expert mechanical repair', 'periodic car servicing',
-    'mirror finish car detailing', 'smooth brake repair', 'genuine spare parts',
-    'punctual vehicle delivery', 'clean workshop and waiting lounge', 'transparent service pricing',
-    'flawless wheel alignment', 'experienced auto mechanics', 'reliable car care center',
-    'no hidden repair costs', 'expert engine tuning', 'hygienic car wash and vacuuming',
-    'flawless paint denting work', 'ceramic coating protection', 'ac cooling repair',
-    'battery replacement service', 'smooth suspension overhaul', 'best garage in town'
+    'honest mechanic', 'reliable vehicle service', 'best workshop near me', 'timely vehicle delivery',
+    'genuine advice', 'fair labor charges', 'clean workshop', 'experienced technicians',
+    'quick vehicle repair', 'trusted garage in town', 'proper vehicle checkup', 'transparent pricing'
   ],
 
   realestate: [
-    'transparent property advisory', 'honest real estate consultants', 'smooth property documentation',
-    'best residential locations', 'fair property deal negotiations', 'punctual site visits',
-    'deep local market knowledge', 'hassle free property verification', 'reliable property guidance',
-    'dream home consultation', 'clear title deeds support', 'professional property advisory',
-    'ready to move flats', 'commercial shop investment', 'gated community plots'
+    'trusted property dealer', 'honest real estate consultant', 'transparent property deals',
+    'best broker in the area', 'fair guidance', 'reliable property agent',
+    'smooth documentation assistance', 'clear property advice', 'professional real estate service'
   ],
 
   retail: [
-    'extensive product collection', 'genuine quality items', 'courteous store staff',
-    'organized shopping aisles', 'fair and honest pricing', 'helpful sales assistance',
-    'smooth billing experience', 'clean and spacious shop', 'wide variety of choices',
-    'authentic branded products', 'customer friendly return policy', 'delightful retail experience'
+    'wide variety of products', 'best shopping experience', 'fair pricing', 'honest shopkeeper',
+    'quality products', 'polite customer service', 'top store in the market', 'reliable dealer',
+    'wholesale rates', 'trusted showroom', 'good stock availability', 'pleasant shopping'
   ],
 
   other: [
-    'exceptionally professional service', 'courteous customer support', 'punctual and reliable team',
-    'high quality workmanship', 'transparent pricing with zero hidden fees', 'attentive customer care',
-    'smooth and seamless experience', 'dedicated and trustworthy staff', 'clean and disciplined work'
+    'outstanding service', 'professional team', 'prompt customer support', 'reliable business',
+    'fair and transparent dealing', 'high quality work', 'courteous staff', 'timely execution'
   ]
 };
 
-// Subcategory specific keywords override dictionary
+// Specialized booster keywords for subcategories (strictly non-specific, non-personal, no fake promises)
 export const SUBCATEGORY_KEYWORDS: Record<string, string[]> = {
   // Marble Subcategories
-  italian: [
-    'imported italian marble', 'statuario marble slabs', 'calacatta white marble', 'botticino classic marble',
-    'luxury italian marble flooring', 'bookmatch marble slabs', 'imported marble showroom', 'mirror polish italian marble'
+  marble_granite: [
+    'best marble shop', 'marble and granite dealer', 'wholesale marble rates',
+    'quality granite slabs', 'durable stone dealer', 'trusted marble showroom'
   ],
-  indian_marble: [
-    'makrana white marble', 'makrana albeta marble', 'rajnagar white marble', 'katni marble slabs',
-    'dungri marble flooring', 'pure white marble dealer', 'jaipur marble supplier', 'kishangarh direct marble'
+  tiles_showroom: [
+    'top tiles showroom', 'quality floor tiles', 'wall tiles dealer',
+    'modern tile designs', 'bathroom tiles collection', 'large tile display'
   ],
-  granite: [
-    'black galaxy granite', 'rajasthan black granite', 'tan brown granite slab', 'kitchen countertop granite slab',
-    'leather finish granite', 'flamed outdoor granite', 'granite cut to size', 'mirror polish granite'
+  flooring_supplier: [
+    'flooring stone supplier', 'best flooring shop', 'reliable building stone',
+    'durable floor tiles', 'complete flooring collection'
   ],
-  tiles: [
-    'vitrified floor tiles', 'large format glazed vitrified tiles', 'designer bathroom wall tiles',
-    'anti-skid floor tiles', 'full body vitrified tiles', 'wooden plank finish tiles', 'morbi vitrified tiles'
+  sanitary_bath: [
+    'sanitaryware store', 'bathroom fittings showroom', 'quality bath fittings',
+    'designer sanitary dealer', 'complete bathroom solutions'
   ],
-  quartz: [
-    'engineered quartz slabs', 'nano white stone slab', 'composite marble slabs',
-    'scratch resistant quartz', 'heat resistant kitchen quartz', 'calacatta quartz countertop'
-  ],
+
   // Clinic Subcategories
   dental: [
-    'painless root canal treatment', 'dental implants specialist', 'gentle teeth cleaning',
-    'invisible teeth aligners', 'cosmetic smile makeover', 'wisdom tooth removal', 'sterile dental instruments'
-  ],
-  dermatology: [
-    'expert dermatologist', 'advanced acne scar treatment', 'laser hair reduction',
-    'hair fall PRP treatment', 'glowing skin medi-facial', 'pigmentation removal treatment'
-  ],
-  eye: [
-    'comprehensive eye examination', 'cataract surgery consultation', 'lasik vision correction',
-    'retina checkup specialist', 'computer vision syndrome relief'
-  ],
-  orthopedic: [
-    'orthopedic joint specialist', 'knee pain treatment', 'fracture bone care',
-    'arthritis joint management', 'spine and back pain specialist'
-  ],
-  pediatric: [
-    'gentle pediatrician doctor', 'child vaccination center', 'infant growth monitoring',
-    'kids friendly clinic', 'child fever and cough specialist'
+    'best dental clinic', 'experienced dentist', 'hygienic dental clinic',
+    'patient friendly doctor', 'proper dental checkup', 'clean dental setup',
+    'affordable consultation fee', 'trusted dentist in town', 'gentle dental care'
   ],
   general_physician: [
-    'experienced general physician', 'accurate disease diagnosis', 'fever and weakness consultation',
-    'blood pressure and diabetes monitoring', 'honest medicine prescription'
+    'experienced general physician', 'proper diagnosis', 'reliable family doctor',
+    'patient friendly clinic', 'clean clinic setup', 'caring medical staff'
   ],
+  dermatology: [
+    'skin clinic in town', 'experienced skin doctor', 'proper skin consultation',
+    'hygienic clinic setup', 'caring dermatologist', 'clean premises'
+  ],
+  eye: [
+    'reliable eye clinic', 'experienced eye doctor', 'proper eye checkup',
+    'hygienic clinic premises', 'patient friendly ophthalmologist'
+  ],
+  pediatric: [
+    'caring child specialist', 'patient pediatrician', 'gentle child checkup',
+    'clean clinic environment', 'reassuring doctor for kids'
+  ],
+  orthopedic: [
+    'experienced orthopedic doctor', 'proper bone and joint care',
+    'patient consultation', 'reliable joint specialist', 'thorough diagnosis'
+  ],
+  physiotherapy: [
+    'attentive physiotherapist', 'guided exercises', 'clean therapy setup',
+    'polite staff', 'supportive rehabilitation care'
+  ],
+
   // Coaching Subcategories
-  iit_neet: [
-    'iit jee preparation', 'neet medical coaching', 'expert physics faculty',
-    'chemistry concept clarity', 'mathematics shortcut techniques', 'all india mock test series'
+  coaching_centre: [
+    'best coaching centre', 'experienced academic teachers', 'good study environment',
+    'concept clarity', 'supportive faculty', 'regular test practice'
   ],
-  school_tuition: [
-    'school foundation classes', 'cbse board exam coaching', 'class 10 board preparation',
-    'class 12 board scoring guidance', 'individual student attention', 'regular doubt clearing'
-  ],
-  computer_coding: [
-    'full stack web development course', 'python programming classes', 'data science training',
-    'practical coding assignments', 'job placement assistance', 'certified computer course'
+  computer_institute: [
+    'best computer institute', 'practical computer training', 'skilled instructors',
+    'good computer lab', 'supportive IT faculty', 'hands-on practice'
   ],
   competitive_exams: [
-    'upsc civil services guidance', 'ssc cgl preparation', 'bank po exam coaching',
-    'reasoning and aptitude tricks', 'current affairs weekly sessions'
+    'focused exam guidance', 'disciplined study atmosphere', 'regular mock practice',
+    'experienced mentors', 'concept building sessions'
+  ],
+  tuitions: [
+    'supportive tuition teacher', 'personal attention for students',
+    'fundamental concept clarity', 'disciplined tuition classes'
   ],
   spoken_english: [
-    'fluent spoken english classes', 'ielts exam preparation band 8', 'personality development',
-    'public speaking confidence', 'interview clearing training'
-  ],
-  // Gym Subcategories
-  strength: [
-    'heavy strength training', 'powerlifting zone', 'squat racks and barbells',
-    'muscle building coaching', 'olympic weight plates', 'certified fitness trainers'
-  ],
-  cardio_fatloss: [
-    'weight loss transformation', 'hiit cardio workouts', 'fat loss diet guidance',
-    'treadmills and spin bikes', 'calisthenics workout floor'
-  ],
-  crossfit: [
-    'crossfit functional training', 'kettlebell workouts', 'battle ropes and box jumps',
-    'stamina and endurance building', 'high energy group classes'
+    'spoken english classes', 'communication skills training',
+    'supportive english trainer', 'interactive speaking practice'
   ]
 };
 
-// ============================================================================
-// 2. 500+ TEMPLATES ENGINE: ENGLISH, HINDI (देवनागरी), HINGLISH (रोमन)
-// ============================================================================
-
-export const ENGLISH_TEMPLATES = [
-  // Direct Enthusiast (High-Energy)
-  'Hands down the most reliable {keyword} experience! {business_name} {area_city} completely lived up to the hype.',
-  'Truly a 10/10 experience with {business_name}! Their expertise in {keyword} {area_city} is unmatched.',
-  'Super impressed with {business_name}! The attention to detail and quality of {keyword} {area_city} was phenomenal.',
-  'Finally found a trustworthy place for {keyword}! {business_name} {area_city} is definitely the top spot.',
-  'Absolutely outstanding! {business_name} provides the cleanest and most professional {keyword} {area_city}.',
-  'Best decision to choose {business_name} {area_city}. Their {keyword} exceeded all my expectations!',
-  'Top tier {keyword} and exceptional hospitality! You can blindly trust {business_name} {area_city}.',
-  'Phenomenal work by team {business_name}! Their {keyword} {area_city} is second to none.',
-  'Five stars all the way! If you need high quality {keyword} {area_city}, {business_name} is the only place to go.',
-  'Such a refreshing experience with {business_name}! Professionalism and genuine care for {keyword} {area_city}.',
-  'Can not praise {business_name} enough! Brilliant service and top-notch {keyword} {area_city}.',
-  'The best in {city}! {business_name} {area_city} has set the benchmark for {keyword}.',
-  'Fast, reliable, and completely genuine! {business_name} {area_city} nailed it with their {keyword}.',
-  'Exceeded every expectation! {business_name} {area_city} is hands down the number one choice for {keyword}.',
-  'Super satisfied customer here! {business_name} {area_city} offers the most seamless {keyword} in town.',
-  'Flawless service from start to finish! {business_name} {area_city} truly excels at {keyword}.',
-  'Everything about {business_name} {area_city} speaks quality, especially their dedicated {keyword}.',
-  'Very happy with the overall experience at {business_name} {area_city}. Outstanding {keyword}!',
-  'World class standards right here {area_city}! Huge respect to {business_name} for their {keyword}.',
-  'Highly impressed with {business_name}! If you value genuine {keyword} {area_city}, visit them today.',
-  
-  // Detail-Oriented, Value & Hygiene
-  'Visited {business_name} {area_city} for their {keyword}. The premises were spotless, staff was courteous, and everything was explained with total transparency.',
-  'What stands out about {business_name} {area_city} is their patient approach. Their {keyword} was thorough and worth every single penny.',
-  'Very professional and organized setup. {business_name} {area_city} took time to understand what I needed for {keyword} without pushing unnecessary costs.',
-  'From the moment you walk in, {business_name} {area_city} makes you feel valued. Great attention to hygiene and top tier {keyword}.',
-  'Clean environment, polite management, and timely delivery. {business_name} {area_city} is clearly committed to delivering the best {keyword}.',
-  'Superb customer service! The team at {business_name} {area_city} answered all my questions regarding {keyword} patiently.',
-  'Rare to find such genuine dedication nowadays. {business_name} {area_city} handled my {keyword} with utmost sincerity and care.',
-  'Minimal waiting time, modern facilities, and very well-trained professionals at {business_name} {area_city}. Their {keyword} is remarkable.',
-  'Extremely systematic and clean! {business_name} {area_city} handled every aspect of {keyword} with deep domain knowledge.',
-  'Fair pricing and zero hidden surprises! {business_name} {area_city} delivered exceptional results with their {keyword}.',
-  'The staff at {business_name} {area_city} is respectful, skilled, and attentive. One of the best experiences for {keyword} I have had.',
-  'I really appreciate the honest guidance given by {business_name} {area_city}. Their {keyword} was done with utmost precision.',
-  'Hygienic premises, polite staff, and clear communication. {business_name} {area_city} delivers top-grade {keyword}.',
-  'Great value for money! {business_name} {area_city} offers premium quality {keyword} at very reasonable and honest rates.',
-  'Thoroughly impressed by the ethical standards of {business_name} {area_city}. Truly top tier work in {keyword}.',
-
-  // Problem Solver & Peace of Mind
-  'I was quite skeptical before visiting, but {business_name} {area_city} put all my worries to rest with their brilliant {keyword}.',
-  'Had a tricky requirement for {keyword}, but the team at {business_name} {area_city} solved it effortlessly. Highly skilled folks!',
-  'Saved my time and effort completely! {business_name} {area_city} handled my {keyword} seamlessly with zero stress.',
-  'Reliability is everything, and {business_name} {area_city} proved why they are the leaders in {keyword}. Truly dependable service.',
-  'Zero confusion and total clarity throughout. {business_name} {area_city} delivered outstanding {keyword} right on schedule.',
-  'If you have been looking for an honest partner for {keyword} {area_city}, look no further than {business_name}.',
-  'They do not compromise on quality one bit. {business_name} {area_city} provides {keyword} that lasts and delivers real peace of mind.',
-  'Prompt communication, transparent billing, and impeccable {keyword}. {business_name} {area_city} is worth every bit of praise.',
-  'Honest advice without any commercial pressure. {business_name} {area_city} genuinely prioritizes customer happiness with their {keyword}.',
-  'A very smooth experience from start to finish. {business_name} {area_city} demonstrated mastery in {keyword}.'
+// ==========================================
+// 2. ENGLISH REVIEW TEMPLATES (30 Core + 20 Closers = 600 combinations)
+// ==========================================
+export const ENGLISH_TEMPLATES: string[] = [
+  'Had a truly pleasant experience with {business}. The entire team was courteous, attentive, and efficient throughout.',
+  'Finding a dependable place like {business} was a relief. The staff is polite, the premises are spotless, and the dealing is honest.',
+  'Extremely satisfied with the service at {business}. Everything was handled with great care and transparent guidance.',
+  'Very professional setup at {business}. They listen to your requirements patiently and deliver exactly what was promised.',
+  'One of the most reliable businesses in {city}. Honest rates, zero hidden charges, and very welcoming behavior.',
+  'Visiting {business} was a wonderful decision. The team is dedicated, punctual, and highly focused on customer satisfaction.',
+  'Great quality of service at {business}. The owner and staff members are down to earth and speak with utmost respect.',
+  'From the first inquiry to the final delivery, my experience with {business} has been smooth and completely stress-free.',
+  'Top-notch service and very reasonable pricing at {business}. They treat every customer with genuine care and dedication.',
+  'The team at {business} truly values customer time. Clean environment, courteous staff, and very prompt assistance.',
+  'Very organized and well managed! {business} stands out for their honest communication and consistent quality.',
+  'Impressed by the humble attitude of everyone at {business}. They explain all details thoroughly without pushing unnecessary things.',
+  'Outstanding attention to detail at {business}. They maintain high standards of quality and deliver on their commitments.',
+  'It is rare to find such genuine and straightforward service these days. {business} exceeded all our expectations.',
+  'A very calm, professional, and well-maintained establishment. The staff at {business} is always ready to assist with a smile.',
+  'Completely satisfied with the support received at {business}. Clear guidance, fair pricing, and top level customer care.',
+  'The positive reputation of {business} in {city} is well deserved. Consistent quality and very dependable team.',
+  'Courteous staff, hygienic atmosphere, and very fair pricing. {business} has become our go-to place for all needs.',
+  'Very refreshing experience at {business}. The process was quick, well explained, and handled by experienced professionals.',
+  'Thank you to the entire team at {business} for such wonderful service. Everything was done promptly and with high sincerity.',
+  'A seamless experience from start to finish at {business}. The staff is very well trained and always polite.',
+  'High quality service combined with humble hospitality. {business} is definitely setting a great standard in {city}.',
+  'Very transparent dealings and polite communication. {business} proved to be totally worth our trust and time.',
+  'Honest guidance, clean surroundings, and fast turnaround. {business} is hands down the best option in our area.',
+  'Appreciate the patience and dedication of the team at {business}. They made sure every small question was answered.',
+  'Exceptional standards maintained at {business}. The staff takes personal interest in making sure the customer is satisfied.',
+  'Clean, dependable, and prompt! {business} delivered exactly as promised without any unnecessary delays.',
+  'Remarkable service and very polite behavior. {business} has earned our permanent trust and respect.',
+  'A wonderful experience all around. The team at {business} is humble, skilled, and very transparent.',
+  'Truly a benchmark for customer service in {city}. {business} handled everything with perfection and honesty.'
 ];
 
-export const HINDI_TEMPLATES = [
-  // शुद्ध हिन्दी (देवनागरी) - प्राकृतिक, विनम्र और उच्च रैंकिंग
-  'यहाँ का अनुभव सच में बहुत ही शानदार और भरोसेमंद रहा। {business_name} {area_city} पर आप बिना किसी झिझक के पूरा विश्वास कर सकते हैं।',
-  '{business_name} {area_city} से {keyword} की सेवा लेकर दिल खुश हो गया। काम बहुत ही सफाई और जिम्मेदारी के साथ किया गया।',
-  'पूरे {city} में {keyword} के लिए {business_name} {area_city} से बेहतर कोई जगह नहीं है। स्टाफ बहुत ही समझदार और विनम्र है।',
-  'बहुत ही उम्दा क्वालिटी और सही दाम! {business_name} {area_city} ने उम्मीद से कहीं ज्यादा बेहतर काम करके दिया। बहुत-बहुत धन्यवाद!',
-  'साफ-सफाई और प्रोफेशनल तरीके से काम करने में {business_name} {area_city} का कोई मुकाबला नहीं है। {keyword} का काम एकदम परफेक्ट हुआ।',
-  'पहली बार किसी जगह से इतना संतोषजनक अनुभव मिला। {business_name} {area_city} वाले बिना किसी छिपे हुए खर्च के ईमानदारी से काम करते हैं।',
-  'अगर आप {area_city} में {keyword} के लिए सबसे अच्छी जगह खोज रहे हैं, तो {business_name} ही एकमात्र सही चुनाव है। 5 स्टार रेटिंग!',
-  '{business_name} {area_city} का काम देखकर सच में बहुत तसल्ली मिली। {keyword} में इनकी विशेषज्ञता वाकई लाजवाब है।',
-  'समय की पाबंदी और काम में फिनिशिंग—दोनों ही मामलों में {business_name} {area_city} नंबर वन हैं। बहुत ही बढ़िया व्यवहार!',
-  'वाजिब रेट्स और बेहतरीन क्वालिटी! {business_name} {area_city} ने हमारे {keyword} के काम को बहुत आसान और टेंशन-फ्री बना दिया।',
-  'इतनी ईमानदारी और लगन से काम करने वाले लोग आजकल बहुत कम मिलते हैं। {business_name} {area_city} को मेरी तरफ से शत-प्रतिशत सिफारिश!',
-  '{business_name} {area_city} में हर बात बहुत विस्तार और धैर्य से समझाई गई। {keyword} की क्वालिटी में कोई कमी नहीं छोड़ी।',
-  'ग्राहक की जरूरत को समझना और उस पर खरा उतरना {business_name} {area_city} की सबसे बड़ी खासियत है। {keyword} का अनुभव 10/10 रहा।',
-  'बहुत ही सुखद और संतुष्टिदायक अनुभव! {business_name} {area_city} के मालिक और पूरे स्टाफ का बर्ताव बहुत ही आदरपूर्ण था।',
-  'काम की फिनिशिंग और मजबूती दोनों ही कमाल की हैं। {business_name} {area_city} को {keyword} के लिए आँख बंद करके चुन सकते हैं।',
-  'हमेशा समय पर डिलीवरी और बेहतरीन सर्विस! {business_name} {area_city} ने {keyword} के काम में हमारी पूरी उम्मीदें पूरी कीं।',
-  '{city} में रहने वाले सभी लोगों को मेरा सुझाव है कि {keyword} के लिए एक बार {business_name} {area_city} जरूर जाएँ।',
-  'बहुत ही आधुनिक व्यवस्था और पारदर्शी तरीका। {business_name} {area_city} में {keyword} का काम बहुत ही शांति और सरलता से पूरा हुआ।',
-  'पैसे की पूरी कद्र और उत्तम परिणाम! {business_name} {area_city} ने {keyword} का काम बिना किसी परेशानी के करवा दिया।',
-  '{business_name} {area_city} की टीम को उनके बेहतरीन काम और सहयोग के लिए दिल से धन्यवाद। 5 में से 5 स्टार!'
+export const ENGLISH_CLOSERS: string[] = [
+  ' Highly recommended to all friends and family!',
+  ' Truly a 5-star experience from start to finish.',
+  ' Will definitely return whenever needed.',
+  ' Keep up the fantastic work and service!',
+  ' A solid 5 out of 5 stars from my side.',
+  ' Wholeheartedly recommending them to everyone.',
+  ' Absolutely worth every penny.',
+  ' So glad we chose this place.',
+  ' Best service in the entire locality!',
+  ' Deserves more than 5 stars for this dedication.',
+  ' Very grateful for their prompt assistance.',
+  ' Anyone looking for genuine service must visit here.',
+  ' Will certainly suggest this to others in my circle.',
+  ' Fully satisfied and happy with the results.',
+  ' A big thumbs up to the entire team!',
+  ' Cannot recommend them enough.',
+  ' Completely satisfied with the overall experience.',
+  ' Five stars all the way!',
+  ' Looking forward to visiting again.',
+  ' Thank you for the wonderful experience!'
 ];
 
-export const HINGLISH_TEMPLATES = [
-  // अर्बन हिंग्लिश (रोमन हिंदी) - 90% भारतीय इसी भाषा में रिव्यू लिखते हैं!
-  'Sach me 10/10 experience raha! {business_name} {area_city} me {keyword} ka kaam ekdum top class hua.',
-  'Poore {city} me {keyword} ke liye {business_name} {area_city} se better koi jagah nahi hai. Staff super friendly aur polite hai.',
-  'Bhai maza aa gaya! {business_name} {area_city} par genuine quality aur bilkul fair price mila {keyword} ke liye.',
-  'Mujhe {business_name} {area_city} ki service sabse transparent lagi. Koi hidden charges nahi the aur kaam time par deliver hua.',
-  'Finally ek aisi jagah mili jahan bina kisi tension ke {keyword} ka kaam karwa sakte hain. Blindly trust kar sakte ho {business_name} par!',
-  'Quality aur service dono me {business_name} {area_city} ka koi tod nahi hai. Super happy with their work in {keyword}!',
-  'Aapka budget chahe jo ho, {business_name} {area_city} hamesha best aur honest solution dete hain {keyword} ke liye.',
-  'Very professional setup! {business_name} {area_city} ne pure dedication ke saath {keyword} complete kiya. Highly recommended!',
-  'Main pehli baar visit kiya tha aur truly impressed ho gaya. {business_name} {area_city} is definitely the number 1 for {keyword}.',
-  'Clean environment, cooperative staff aur zabardast service! {business_name} {area_city} ne expectation se zyada achha deliver kiya.',
-  'Customer satisfaction inka main focus hai. {business_name} {area_city} ke saath {keyword} ka experience ekdum smooth raha.',
-  'Worth every single rupee! {business_name} {area_city} offers the best rates and premium quality for {keyword}.',
-  'Owner aur team dono ka nature bahut humble hai. {business_name} {area_city} par {keyword} ka kaam karwa ke bahut sukoon mila.',
-  'Fast delivery, top-notch finishing aur polite behavior. {business_name} {area_city} is hands down the best choice for {keyword}.',
-  'Agar aap {area_city} me rehte ho toh {keyword} ke liye kahin aur jaane ki zarurat nahi hai, bas {business_name} visit karo.',
-  'Bilkul genuine aur reliable service! {business_name} {area_city} ne {keyword} ke har chote detail par dhyan diya.',
-  'Top level expertise aur time ki punctuality. {business_name} {area_city} deserves more than 5 stars for their {keyword}!',
-  'Bina kisi delay ke aur zero stress ke saath kaam ho gaya. Thank you so much {business_name} {area_city} for outstanding {keyword}.',
-  'Very peaceful and professional vibe. {business_name} {area_city} makes {keyword} look effortless and premium.',
-  'Maine apne doston ko bhi recommend kiya hai. {business_name} {area_city} is the ultimate destination for {keyword} in {city}!'
+// ==========================================
+// 3. PURE NATURAL HINDI TEMPLATES (30 Core + 20 Closers = 600 combinations)
+// NOT translated: written organically as real Indian customers write in Devanagari.
+// ==========================================
+export const HINDI_TEMPLATES: string[] = [
+  '{business} पर हमारा अनुभव बहुत ही सुखद और संतोषजनक रहा। यहाँ का स्टाफ बहुत शालीन और मददगार है।',
+  'काफी समय बाद ऐसी जगह देखने को मिली जहाँ ग्राहकों की बात पूरी तसल्ली से सुनी जाती है। {business} में काम बहुत ईमानदारी से हुआ।',
+  '{business} की सबसे अच्छी बात यह है कि यहाँ कोई झूठे वादे या फालतू की बातें नहीं होतीं। सीधा, सच्चा और साफ काम।',
+  'पहली बार {business} गया था, लेकिन सर्विस और व्यवहार देखकर दिल खुश हो गया। हर चीज़ समय पर और सही तरीके से की गई।',
+  'पूरे {city} में {business} जैसा शांत और व्यवस्थित माहौल मिलना मुश्किल है। काम में पूरी सफाई और पारदर्शिता दिखाई दी।',
+  '{business} का स्टाफ बहुत ही विनम्र है। किसी भी सवाल का जवाब बहुत धैर्य से देते हैं और सही सलाह देते हैं।',
+  'हमारे पूरे परिवार को {business} की व्यवस्था और सेवा बहुत पसंद आई। दाम भी बिल्कुल वाजिब हैं और काम भी उत्तम।',
+  '{business} में न समय की बर्बादी हुई और न ही कोई परेशानी आई। बहुत ही पेशेवर और सुलझे हुए लोग हैं यहाँ।',
+  'अगर आप सही मार्गदर्शन और भरोसेमंद काम चाहते हैं, तो {business} बिल्कुल सही जगह है। बहुत अच्छा अनुभव रहा।',
+  '{business} पर काम की क्वालिटी और बात करने का सलीका दोनों ही बेहतरीन हैं। ग्राहक को पूरा सम्मान देते हैं।',
+  '{business} से जुड़कर बहुत अच्छा लगा। जो बात तय हुई थी, बिल्कुल उसी तरह जिम्मेदारी से काम पूरा किया गया।',
+  'आजकल ऐसी ईमानदारी से काम करने वाले कम ही मिलते हैं। {business} की टीम ने हमारा भरोसा पूरी तरह जीत लिया।',
+  '{city} के आसपास {business} जैसी बढ़िया और तसल्लीबख्श सर्विस कहीं नहीं देखी। बहुत ही सुलझा हुआ स्टाफ है।',
+  '{business} की व्यवस्था बहुत ही साफ-सुथरी और अनुशासित है। हर काम तय समय के अंदर पूरा कर दिया गया।',
+  'यहाँ आकर लगा कि सही जगह पहुँचे हैं। {business} के ओनर और पूरे स्टाफ का बर्ताव बहुत ही आत्मीय और सहयोगपूर्ण है।',
+  '{business} पर हमारा काम बिना किसी झंझट के बहुत आसानी से हो गया। पूरी टीम बहुत ही मेहनती और जिम्मेदार है।',
+  'पैसा वसूल अनुभव रहा! {business} में क्वालिटी से कोई समझौता नहीं किया जाता और रेट्स भी पूरी तरह पारदर्शी हैं।',
+  '{business} ने जिस सादगी और विनम्रता से हमारी जरूरत को समझा, वह सच में काबिले तारीफ है।',
+  'एक बार {business} जाने के बाद किसी और जगह जाने की जरूरत ही महसूस नहीं होती। बहुत ही पक्का और खरा काम।',
+  '{business} का पूरा सिस्टम बहुत बढ़िया है। ग्राहकों के समय की कद्र करते हैं और हर चीज़ पहले से स्पष्ट रखते हैं।',
+  '{business} की टीम को बहुत-बहुत धन्यवाद। बहुत ही शांत और सकारात्मक माहौल में पूरा काम निपटाया।',
+  'हमारी उम्मीद से कहीं बेहतर अनुभव रहा {business} में। काम भी समय पर हुआ और स्टाफ ने भी पूरा सहयोग दिया।',
+  '{business} पर हर ग्राहक को बराबर ध्यान और आदर दिया जाता है। बहुत ही भरोसेमंद और प्रतिष्ठित संस्थान है।',
+  'सच्चाई और ईमानदारी से काम करने के लिए {business} की जितनी तारीफ की जाए कम है। बहुत ही उम्दा काम।',
+  '{business} में काम कराने का अनुभव बहुत सुकून देने वाला रहा। कोई उलझन नहीं, सिर्फ काम पर ध्यान।',
+  'अगर आप बिना किसी परेशानी के अच्छा काम चाहते हैं, तो {business} आपके लिए सबसे बेहतरीन विकल्प है।',
+  '{business} का काम देखकर बहुत संतुष्टि हुई। बातचीत का तरीका बहुत शालीन है और काम में कोई कमी नहीं छोड़ी।',
+  '{city} में रहने वाले सभी लोगों के लिए {business} एक बहुत ही विश्वसनीय और उत्तम जगह है।',
+  '{business} पर जो सम्मान और अच्छी सर्विस मिली, उसके लिए पूरी टीम का दिल से आभार। बहुत बढ़िया काम!',
+  '{business} में हर चीज़ बहुत सुव्यवस्थित तरीके से की जाती है। सच में एक 5 स्टार अनुभव रहा यहाँ पर।'
 ];
 
-// Openers and closers for combinatorial expansion to 500+ variants
-const ENGLISH_CLOSERS = [
-  ' Highly recommended to everyone!',
-  ' Truly deserves 5 stars without a doubt.',
-  ' Will definitely recommend to friends and family.',
-  ' Keep up the fantastic work team!',
-  ' Best in the entire area!',
-  ' A 10/10 recommendation from my side.'
+export const HINDI_CLOSERS: string[] = [
+  ' मेरी तरफ से पूरे 5 स्टार!',
+  ' सभी को यहाँ आने की दिल से सलाह दूँगा।',
+  ' आगे भी हमेशा यहीं आना पसंद करेंगे।',
+  ' बहुत-बहुत धन्यवाद इस शानदार सेवा के लिए!',
+  ' पूरी तरह से पैसा वसूल और तसल्लीबख्श अनुभव।',
+  ' ऐसे ही बढ़िया काम करते रहें, शुभकामनाएँ!',
+  ' अपने सभी दोस्तों और रिश्तेदारों को जरूर बताऊँगा।',
+  ' 10 में से पूरे 10 नंबर!',
+  ' बहुत खुशी हुई यहाँ की ईमानदारी देखकर।',
+  ' एक बार जरूर जाकर अनुभव करें।',
+  ' दिल से आभार पूरी टीम का!',
+  ' इस इलाके की सबसे बेहतरीन जगह है यह।',
+  ' पूरी तरह संतुष्ट और खुश हूँ।',
+  ' ईश्वर आपके काम में और बरकत दे!',
+  ' निश्चित रूप से 5 स्टार रेटिंग के हकदार हैं।',
+  ' हमारा पूरा भरोसा जीत लिया इन्होंने।',
+  ' बहुत ही सुखद और यादगार अनुभव रहा।',
+  ' कोई कमी नहीं, सब कुछ बहुत बढ़िया था।',
+  ' दोबारा जरूर यहाँ आएँगे।',
+  ' बहुत-बहुत धन्यवाद!'
 ];
 
-const HINDI_CLOSERS = [
-  ' सभी को दिल से सुझाव दूंगा कि यहाँ जरूर आएँ!',
-  ' पूरे 5 स्टार रेटिंग का हकदार!',
-  ' अपने दोस्तों और रिश्तेदारों को भी यहाँ जाने की सलाह दूंगा।',
-  ' बहुत-बहुत धन्यवाद पूरी टीम का!',
-  ' वाकई शहर की सबसे बेहतरीन जगह है।'
+// ==========================================
+// 4. NATURAL URBAN HINGLISH TEMPLATES (30 Core + 20 Closers = 600 combinations)
+// NOT translated: written naturally in Roman Hindi / urban Hinglish as real users chat & post.
+// ==========================================
+export const HINGLISH_TEMPLATES: string[] = [
+  '{business} me sach me bohot hi badhiya aur smooth experience raha. Staff ka nature bohot polite aur helpful hai.',
+  'Pehli baar visit kiya tha {business} aur inka kaam aur dealing dekh kar dil khush ho gaya. Super satisfied!',
+  '{business} ki sabse acchi baat yeh hai ki koi hidden charges ya faltu baatein nahi hain. Sab kuch bilkul clear aur genuine.',
+  'Pure {city} me {business} jaisi clean, organized aur professional jagah milna kaafi mushkil hai.',
+  '{business} ka staff har customer ko proper time aur respect deta hai. Har cheez detail me samjhate hain.',
+  'Hamari family ka experience {business} ke saath bohot accha raha. Kaam bilkul time par aur perfect tareeke se hua.',
+  '{business} me na koi time waste hua na koi confusion. Bohot hi systematic aur disciplined tarike se sab handle kiya.',
+  'Agar aapko ek honest aur reliable jagah chahiye to {business} definitely best option hai.',
+  '{business} ke owner aur staff dono hi bohot humble hain. Kisi bhi cheez me push nahi karte, bilkul genuine advice dete hain.',
+  'Service quality aur customer support dono me {business} 10 on 10 hai. Ekdum hassle free dealing rahi.',
+  '{business} me jo commit kiya tha bilkul wahi deliver kiya. Aajkal aisi commitment bohot kam dekhne ko milti hai.',
+  '{city} me rehte ho to ek baar {business} zaroor try karo. Kaam dekh kar aapka bhi dil khush ho jayega.',
+  'Bohot hi hygienic aur well maintained setup hai {business} ka. Staff ka behavior ekdum friendly aur respectful hai.',
+  '{business} ki service dekh ke laga ki paisa bilkul sahi jagah invest hua hai. Zero complaints!',
+  'Mere friend ne recommend kiya tha {business} aur wahan jakar bilkul nirasha nahi hui. Top notch service!',
+  '{business} par customer satisfaction ko sabse zyada priority di jaati hai. Bohot impressed hua inki honesty se.',
+  'Everything was on point at {business}. Quick processing, polite communication aur time par delivery.',
+  '{business} ne jis tarah se hamari requirement ko samjha aur solution diya, wo wakai bohot commendable hai.',
+  'Aage se koi bhi kaam ho to hum definitely {business} hi aayenge. Full trust ban gaya hai inpe.',
+  '{business} ka calm aur positive atmosphere bohot accha laga. Koi jaldbaazi ya pressure nahi hota.',
+  'Thank you so much to the whole team of {business}. Itna accha aur tension-free experience dene ke liye.',
+  'Kaam ki finishing aur quality dono ekdum top class hai {business} me. Highly impressed!',
+  '{business} par har cheez ka rate bilkul genuine aur fair hai. Bilkul straightforward aur honest dealing.',
+  'Bohot kam jagah aisi hoti hain jahan customer ko itni value milti hai. {business} is truly one of them.',
+  'Clean environment, trained staff aur transparent process. {business} deserves all the praise.',
+  '{business} me humara kaam itni aasani se ho gaya ki koi effort hi nahi lagana pada. Very smooth process.',
+  'Genuine log hain {business} me aur kaam bhi bilkul solid karte hain. Bilkul 5 star service mili.',
+  '{city} me aisi reliable aur dedicated service dekh kar bohot accha laga. Kudos to {business}!',
+  '{business} ka customer handling ka tareeka bohot hi professional aur humble hai. Totally worth it.',
+  'Overall super happy with the service at {business}. Ek baar visit karoge to fan ho jaoge.'
 ];
 
-const HINGLISH_CLOSERS = [
-  ' Definitely recommend karunga sabhi ko!',
-  ' Poore 5 stars bante hain bina kisi doubt ke.',
-  ' Friends aur family ko bhi yahi recommend kiya hai.',
-  ' Great work team, keep it up!',
-  ' City ka best spot hai ye!'
+export const HINGLISH_CLOSERS: string[] = [
+  ' Meri taraf se solid 5 stars!',
+  ' Highly recommended to all my friends and family.',
+  ' Aage se hamesha yahin aana fix ho gaya!',
+  ' Thank you so much for the wonderful service.',
+  ' Ekdum paisa vasool experience raha!',
+  ' Keep up the great work guys!',
+  ' 10/10 service, definitely visit karein.',
+  ' Truly one of the best in the city.',
+  ' Bohot accha laga yahan aakar.',
+  ' Full 5 star rating banti hai inke liye!',
+  ' Absolutely loved the experience.',
+  ' Har kisi ko recommend karunga.',
+  ' Super happy and fully satisfied!',
+  ' Genuine aur trustworthy jagah hai yeh.',
+  ' Thumbs up to the entire team!',
+  ' Best in the market hands down.',
+  ' Zero complaints, full satisfaction.',
+  ' Fir se zaroor aana hoga yahan.',
+  ' Great experience all around!',
+  ' Dil se thanks aisi service ke liye!'
 ];
 
-// 3. Dynamic Keyword Finder
-function getKeywordsForCategory(categoryName: string, subcategoryName?: string): string[] {
-  const normCat = categoryName.toLowerCase();
+// ==========================================
+// 5. HELPER FUNCTIONS FOR KEYWORDS & TEMPLATES
+// ==========================================
 
-  // 1. Try Subcategory match first
-  if (subcategoryName) {
-    const normSub = subcategoryName.toLowerCase().replace(/[^a-z0-9]/g, '_');
-    for (const [subKey, kwList] of Object.entries(SUBCATEGORY_KEYWORDS)) {
-      if (normSub.includes(subKey) || subKey.includes(normSub)) {
-        return kwList;
-      }
+export function getKeywordsForCategory(category: string, subcategory?: string): string[] {
+  const normCat = (category || '').toLowerCase().trim();
+  const normSub = (subcategory || '').toLowerCase().trim();
+
+  let baseList: string[] = CATEGORY_KEYWORDS.other;
+
+  if (normCat.includes('marble') || normCat.includes('tile') || normCat.includes('granite')) {
+    baseList = CATEGORY_KEYWORDS.marble;
+  } else if (normCat.includes('clinic') || normCat.includes('doctor') || normCat.includes('health')) {
+    baseList = CATEGORY_KEYWORDS.clinic;
+  } else if (normCat.includes('coach') || normCat.includes('educat') || normCat.includes('tutor') || normCat.includes('class')) {
+    baseList = CATEGORY_KEYWORDS.coaching;
+  } else if (normCat.includes('gym') || normCat.includes('fit')) {
+    baseList = CATEGORY_KEYWORDS.gym;
+  } else if (normCat.includes('salon') || normCat.includes('parlour') || normCat.includes('spa')) {
+    baseList = CATEGORY_KEYWORDS.salon;
+  } else if (normCat.includes('cafe') || normCat.includes('restaur') || normCat.includes('food')) {
+    baseList = CATEGORY_KEYWORDS.cafe;
+  } else if (normCat.includes('auto') || normCat.includes('car') || normCat.includes('garage')) {
+    baseList = CATEGORY_KEYWORDS.automotive;
+  } else if (normCat.includes('real') || normCat.includes('property')) {
+    baseList = CATEGORY_KEYWORDS.realestate;
+  } else if (normCat.includes('retail') || normCat.includes('shop') || normCat.includes('store')) {
+    baseList = CATEGORY_KEYWORDS.retail;
+  }
+
+  // Look for specialized subcategory keywords
+  let subList: string[] = [];
+  for (const [key, keywords] of Object.entries(SUBCATEGORY_KEYWORDS)) {
+    if (normSub.includes(key) || key.includes(normSub)) {
+      subList = keywords;
+      break;
     }
   }
 
-  // 2. Try Category match
-  if (normCat.includes('marble') || normCat.includes('granite') || normCat.includes('tile')) return CATEGORY_KEYWORDS.marble;
-  if (normCat.includes('clinic') || normCat.includes('health') || normCat.includes('doctor') || normCat.includes('dent')) return CATEGORY_KEYWORDS.clinic;
-  if (normCat.includes('coach') || normCat.includes('educat') || normCat.includes('tuition') || normCat.includes('school')) return CATEGORY_KEYWORDS.coaching;
-  if (normCat.includes('gym') || normCat.includes('fit')) return CATEGORY_KEYWORDS.gym;
-  if (normCat.includes('salon') || normCat.includes('spa') || normCat.includes('beauty')) return CATEGORY_KEYWORDS.salon;
-  if (normCat.includes('cafe') || normCat.includes('restaur') || normCat.includes('food')) return CATEGORY_KEYWORDS.cafe;
-  if (normCat.includes('auto') || normCat.includes('car') || normCat.includes('garage')) return CATEGORY_KEYWORDS.automotive;
-  if (normCat.includes('estate') || normCat.includes('property') || normCat.includes('plot')) return CATEGORY_KEYWORDS.realestate;
-  if (normCat.includes('retail') || normCat.includes('shop')) return CATEGORY_KEYWORDS.retail;
-
-  return CATEGORY_KEYWORDS.other;
+  return subList.length > 0 ? [...subList, ...baseList] : baseList;
 }
 
-// 4. Fill Placeholders safely
 function fillTemplate(
   template: string,
   businessName: string,
-  keyword: string,
   city?: string,
   nearbyAreas?: string[]
 ): string {
-  const cleanCity = city?.trim() || '';
-  const area = nearbyAreas && nearbyAreas.length > 0
-    ? nearbyAreas[Math.floor(Math.random() * nearbyAreas.length)].trim()
-    : '';
-
-  let areaCity = '';
-  if (area && cleanCity) {
-    areaCity = `near ${area}, ${cleanCity}`;
-  } else if (cleanCity) {
-    areaCity = `in ${cleanCity}`;
-  } else if (area) {
-    areaCity = `in ${area}`;
+  let locationStr = '';
+  if (city && nearbyAreas && nearbyAreas.length > 0) {
+    locationStr = Math.random() > 0.5 ? nearbyAreas[0] : city;
+  } else if (city) {
+    locationStr = city;
+  } else if (nearbyAreas && nearbyAreas.length > 0) {
+    locationStr = nearbyAreas[0];
+  } else {
+    locationStr = 'this area';
   }
 
   return template
-    .replace(/\{business_name\}/g, businessName)
-    .replace(/\{keyword\}/g, keyword)
-    .replace(/\{city\}/g, cleanCity || 'town')
-    .replace(/\{area\}/g, area || cleanCity || 'our area')
-    .replace(/\{area_city\}/g, areaCity ? `(${areaCity})` : '')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/\{business\}/g, businessName)
+    .replace(/\{city\}/g, locationStr);
 }
 
 /**
- * Generates an initial pool of diverse reviews categorized by Language (English, Hindi, Hinglish)
- * specifically tuned to the business's Category and Subcategory.
+ * Generates an initial pool of unique reviews based on Admin language choice.
+ * 
+ * @param langMode 'en' | 'hi' | 'hinglish' | 'mixed'
  */
 export function generateInitialReviewPool(
   businessName: string,
@@ -454,75 +440,78 @@ export function generateInitialReviewPool(
   subcategory?: string,
   city?: string,
   nearbyAreas?: string[],
-  totalCount: number = 24,
-  languages: ('en' | 'hi' | 'hinglish')[] = ['en', 'hi', 'hinglish']
+  totalCount: number = 20,
+  langMode: 'en' | 'hi' | 'hinglish' | 'mixed' = 'en'
 ): {
   flatReviews: string[];
   reviewsByLang: { en: string[]; hi: string[]; hinglish: string[] };
 } {
-  const activeLangs = languages && languages.length > 0 ? languages : ['en', 'hi', 'hinglish'];
-  const keywords = getKeywordsForCategory(category, subcategory);
-
   const reviewsByLang: { en: string[]; hi: string[]; hinglish: string[] } = {
     en: [],
     hi: [],
     hinglish: []
   };
 
-  const perLangCount = Math.max(4, Math.ceil(totalCount / activeLangs.length));
+  const countPerLang = langMode === 'mixed' ? Math.max(6, Math.ceil(totalCount / 3)) : totalCount;
 
-  // 1. English Reviews
-  if (activeLangs.includes('en')) {
+  // 1. English Pool
+  if (langMode === 'en' || langMode === 'mixed') {
     const enPool = new Set<string>();
     let attempts = 0;
-    while (enPool.size < perLangCount && attempts < 100) {
+    while (enPool.size < countPerLang && attempts < 100) {
       attempts++;
       const tmpl = ENGLISH_TEMPLATES[Math.floor(Math.random() * ENGLISH_TEMPLATES.length)];
-      const kw = keywords[Math.floor(Math.random() * keywords.length)];
-      const closer = Math.random() > 0.4 ? ENGLISH_CLOSERS[Math.floor(Math.random() * ENGLISH_CLOSERS.length)] : '';
-      const filled = fillTemplate(tmpl, businessName, kw, city, nearbyAreas) + closer;
+      const closer = Math.random() > 0.3 ? ENGLISH_CLOSERS[Math.floor(Math.random() * ENGLISH_CLOSERS.length)] : '';
+      const filled = fillTemplate(tmpl, businessName, city, nearbyAreas) + closer;
       enPool.add(filled);
     }
     reviewsByLang.en = Array.from(enPool);
   }
 
-  // 2. Hindi Reviews (शुद्ध देवनागरी)
-  if (activeLangs.includes('hi')) {
+  // 2. Hindi Pool (शुद्ध स्वाभाविक देवनागरी)
+  if (langMode === 'hi' || langMode === 'mixed') {
     const hiPool = new Set<string>();
     let attempts = 0;
-    while (hiPool.size < perLangCount && attempts < 100) {
+    while (hiPool.size < countPerLang && attempts < 100) {
       attempts++;
       const tmpl = HINDI_TEMPLATES[Math.floor(Math.random() * HINDI_TEMPLATES.length)];
-      const kw = keywords[Math.floor(Math.random() * keywords.length)];
-      const closer = Math.random() > 0.4 ? HINDI_CLOSERS[Math.floor(Math.random() * HINDI_CLOSERS.length)] : '';
-      const filled = fillTemplate(tmpl, businessName, kw, city, nearbyAreas) + closer;
+      const closer = Math.random() > 0.3 ? HINDI_CLOSERS[Math.floor(Math.random() * HINDI_CLOSERS.length)] : '';
+      const filled = fillTemplate(tmpl, businessName, city, nearbyAreas) + closer;
       hiPool.add(filled);
     }
     reviewsByLang.hi = Array.from(hiPool);
   }
 
-  // 3. Hinglish Reviews (रोमन हिंदी)
-  if (activeLangs.includes('hinglish')) {
+  // 3. Hinglish Pool (Natural Roman Hindi)
+  if (langMode === 'hinglish' || langMode === 'mixed') {
     const hgPool = new Set<string>();
     let attempts = 0;
-    while (hgPool.size < perLangCount && attempts < 100) {
+    while (hgPool.size < countPerLang && attempts < 100) {
       attempts++;
       const tmpl = HINGLISH_TEMPLATES[Math.floor(Math.random() * HINGLISH_TEMPLATES.length)];
-      const kw = keywords[Math.floor(Math.random() * keywords.length)];
-      const closer = Math.random() > 0.4 ? HINGLISH_CLOSERS[Math.floor(Math.random() * HINGLISH_CLOSERS.length)] : '';
-      const filled = fillTemplate(tmpl, businessName, kw, city, nearbyAreas) + closer;
+      const closer = Math.random() > 0.3 ? HINGLISH_CLOSERS[Math.floor(Math.random() * HINGLISH_CLOSERS.length)] : '';
+      const filled = fillTemplate(tmpl, businessName, city, nearbyAreas) + closer;
       hgPool.add(filled);
     }
     reviewsByLang.hinglish = Array.from(hgPool);
   }
 
-  // Interleave evenly into a flat list
-  const flatReviews: string[] = [];
-  const maxLen = Math.max(reviewsByLang.en.length, reviewsByLang.hi.length, reviewsByLang.hinglish.length);
-  for (let i = 0; i < maxLen; i++) {
-    if (reviewsByLang.en[i]) flatReviews.push(reviewsByLang.en[i]);
-    if (reviewsByLang.hi[i]) flatReviews.push(reviewsByLang.hi[i]);
-    if (reviewsByLang.hinglish[i]) flatReviews.push(reviewsByLang.hinglish[i]);
+  // Construct flat list based on mode
+  let flatReviews: string[] = [];
+  if (langMode === 'hi') {
+    flatReviews = reviewsByLang.hi;
+  } else if (langMode === 'hinglish') {
+    flatReviews = reviewsByLang.hinglish;
+  } else if (langMode === 'en') {
+    flatReviews = reviewsByLang.en;
+  } else {
+    // Interleave mixed reviews
+    const maxLen = Math.max(reviewsByLang.en.length, reviewsByLang.hi.length, reviewsByLang.hinglish.length);
+    for (let i = 0; i < maxLen; i++) {
+      if (reviewsByLang.hi[i]) flatReviews.push(reviewsByLang.hi[i]);
+      if (reviewsByLang.hinglish[i]) flatReviews.push(reviewsByLang.hinglish[i]);
+      if (reviewsByLang.en[i]) flatReviews.push(reviewsByLang.en[i]);
+    }
   }
 
   return {
@@ -532,7 +521,7 @@ export function generateInitialReviewPool(
 }
 
 /**
- * Dynamically generates a single review in a specific language on the fly.
+ * Dynamically generates a single review in a specific language.
  */
 export function generateDynamicReview(
   businessName: string,
@@ -542,22 +531,19 @@ export function generateDynamicReview(
   nearbyAreas?: string[],
   lang: 'en' | 'hi' | 'hinglish' = 'en'
 ): string {
-  const keywords = getKeywordsForCategory(category, subcategory);
-  const kw = keywords[Math.floor(Math.random() * keywords.length)];
-
   if (lang === 'hi') {
     const tmpl = HINDI_TEMPLATES[Math.floor(Math.random() * HINDI_TEMPLATES.length)];
-    const closer = Math.random() > 0.4 ? HINDI_CLOSERS[Math.floor(Math.random() * HINDI_CLOSERS.length)] : '';
-    return fillTemplate(tmpl, businessName, kw, city, nearbyAreas) + closer;
+    const closer = Math.random() > 0.3 ? HINDI_CLOSERS[Math.floor(Math.random() * HINDI_CLOSERS.length)] : '';
+    return fillTemplate(tmpl, businessName, city, nearbyAreas) + closer;
   }
 
   if (lang === 'hinglish') {
     const tmpl = HINGLISH_TEMPLATES[Math.floor(Math.random() * HINGLISH_TEMPLATES.length)];
-    const closer = Math.random() > 0.4 ? HINGLISH_CLOSERS[Math.floor(Math.random() * HINGLISH_CLOSERS.length)] : '';
-    return fillTemplate(tmpl, businessName, kw, city, nearbyAreas) + closer;
+    const closer = Math.random() > 0.3 ? HINGLISH_CLOSERS[Math.floor(Math.random() * HINGLISH_CLOSERS.length)] : '';
+    return fillTemplate(tmpl, businessName, city, nearbyAreas) + closer;
   }
 
   const tmpl = ENGLISH_TEMPLATES[Math.floor(Math.random() * ENGLISH_TEMPLATES.length)];
-  const closer = Math.random() > 0.4 ? ENGLISH_CLOSERS[Math.floor(Math.random() * ENGLISH_CLOSERS.length)] : '';
-  return fillTemplate(tmpl, businessName, kw, city, nearbyAreas) + closer;
+  const closer = Math.random() > 0.3 ? ENGLISH_CLOSERS[Math.floor(Math.random() * ENGLISH_CLOSERS.length)] : '';
+  return fillTemplate(tmpl, businessName, city, nearbyAreas) + closer;
 }
