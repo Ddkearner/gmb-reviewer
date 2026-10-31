@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { LandingPage } from '../types';
-import { X, Download } from 'lucide-react';
+import { X, Download, Printer } from 'lucide-react';
 import { buildShareableLandingPageUrl } from '../utils/storage';
+import { PrintReadyModal } from './PrintReadyModal';
 
 interface QRCodeModalProps {
   page: LandingPage;
@@ -10,6 +11,7 @@ interface QRCodeModalProps {
 }
 
 export const QRCodeModal: React.FC<QRCodeModalProps> = ({ page, onClose }) => {
+  const [showPrintModal, setShowPrintModal] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fullUrl = buildShareableLandingPageUrl(page);
 
@@ -55,15 +57,33 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ page, onClose }) => {
           <canvas ref={canvasRef} className="rounded-lg max-w-[200px] h-auto" />
         </div>
 
-        <button
-          type="button"
-          onClick={handleDownload}
-          className="w-full min-h-[46px] flex items-center justify-center gap-1.5 rounded-full bg-[#000000] text-xs font-semibold text-[#FFFFFF] active:scale-95"
-        >
-          <Download className="w-3.5 h-3.5" />
-          <span>Download QR</span>
-        </button>
+        <div className="space-y-2">
+          <button
+            type="button"
+            onClick={handleDownload}
+            className="w-full min-h-[44px] flex items-center justify-center gap-1.5 rounded-full bg-[#000000] text-xs font-semibold text-[#FFFFFF] active:scale-95 transition-transform"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Download QR</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowPrintModal(true)}
+            className="w-full min-h-[44px] flex items-center justify-center gap-1.5 rounded-full bg-[#F2F2F7] text-xs font-semibold text-[#000000] active:bg-[#E5E5EA] active:scale-95 transition-all"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print Ready QR</span>
+          </button>
+        </div>
       </div>
+
+      {showPrintModal && (
+        <PrintReadyModal
+          page={page}
+          onClose={() => setShowPrintModal(false)}
+        />
+      )}
     </div>
   );
 };
